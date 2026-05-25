@@ -1,6 +1,6 @@
 %YAML:1.0
 
-# KITTI get P0 values for K
+# KITTI get P0 values from calib.txt
 #  fx = P0.values[0]
 #  fy = P0.values[5]
 #  cx = P0.values[2]
