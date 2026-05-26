@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 
     auto images = loadImages(argv[2]);
 
-    ProcessResult result;
+    ProcessResult res;
 
     for (size_t i = 0; i < images.size(); ++i)
     {
@@ -36,19 +36,19 @@ int main(int argc, char** argv)
         if (img.empty())
             continue;
 
-        result = vo.process(img, i * 0.1);
+        res = vo.process(img, i * 0.1);
 
-        if (!result.matched)
+        if (!res.matched)
         {
             std::cout << "Tracking failed" << std::endl;
         }
-        else if (!result.estimated)
+        else if (!res.estimated)
         {
             std::cout << "Pose estimation failed" << std::endl;
         } else
         {
-            visualizer->drawMatches(result.prev_frame, result.curr_frame, result.matches);
-            visualizer->drawPose(result.global_pose);
+            visualizer->drawMatches(res.prev_frame, res.curr_frame, res.matches);
+            visualizer->drawPose(res.global_pose);
         }
     }
 
