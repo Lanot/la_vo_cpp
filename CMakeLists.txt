@@ -17,13 +17,13 @@ include_directories(
 
 add_executable(la_mono_vo
         src/main.cpp
+        src/utils.cpp
         src/frame.cpp
         src/camera_intrinsics.cpp
         src/pose_estimator.cpp
         src/feature_tracker.cpp
         src/visual_odometry.cpp
-        src/utils.cpp
-        src/main.cpp
+        src/opencv_visualizer.cpp
 )
 
 target_link_libraries(la_mono_vo

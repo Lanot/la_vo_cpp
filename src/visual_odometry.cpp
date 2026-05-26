@@ -1,7 +1,8 @@
-#include "visual_odometry.hpp"
-
 #include <vector>
 #include <iostream>
+
+#include "visual_odometry.hpp"
+#include "process_result.hpp"
 
 VisualOdometry::VisualOdometry(const CameraIntrinsics& camera_intrinsics)
     : camera_intrinsics_(camera_intrinsics)
@@ -9,91 +10,66 @@ VisualOdometry::VisualOdometry(const CameraIntrinsics& camera_intrinsics)
     global_pose_ = Sophus::SE3d();
 }
 
-bool VisualOdometry::process(
+ProcessResult VisualOdometry::process(
     const cv::Mat& image,
     double timestamp)
 {
-    current_ = Frame::create();
+    ProcessResult res;
 
+    current_ = Frame::create();
     current_->image = image.clone();
     current_->timestamp = timestamp;
 
     tracker_.extract(current_);
 
+    res.prev_frame = previous_;
+    res.curr_frame = current_;
+
     if (!previous_)
     {
         previous_ = current_;
-        return true;
+        return res;
     }
 
-    std::vector<cv::DMatch> matches;
-
-    std::vector<cv::Point2f> pts1, pts2;
-
-    bool matched = tracker_.match(
+    res.matched = tracker_.match(
         previous_,
         current_,
-        matches,
-        pts1,
-        pts2
+        res.matches,
+        res.pts1,
+        res.pts2
     );
 
-    if (!matched)
+    if (!res.matched)
     {
-        std::cout << "Tracking failed" << std::endl;
         previous_ = current_;
-        return false;
+        return res;
     }
-
-    Sophus::SE3d relative_pose;
 
     std::vector<uchar> status;
 
-    bool estimated = estimator_.estimate(
-        pts1,
-        pts2,
+    res.estimated = estimator_.estimate(
+        res.pts1,
+        res.pts2,
         camera_intrinsics_.K(),
-        relative_pose,
+        res.relative_pose,
         status
     );
 
-    if (!estimated)
+    if (!res.estimated)
     {
-        std::cout << "Pose estimation failed" << std::endl;
         previous_ = current_;
-        return false;
+        return res;
     }
 
-    global_pose_ = global_pose_ * relative_pose;
-
+    global_pose_ = global_pose_ * res.relative_pose;
     current_->pose = global_pose_;
 
-    // ----------------------------------------------------- //
-    cv::Mat vis;
-
-    cv::drawMatches(
-        previous_->image,
-        previous_->keypoints,
-        current_->image,
-        current_->keypoints,
-        matches,
-        vis
-    );
-
-    cv::imshow("matches", vis);
-    cv::waitKey(1);
-
-    Eigen::Vector3d t = global_pose_.translation();
-
-    std::cout
-        << "Pose: "
-        << t.transpose()
-        << std::endl;
-    // ----------------------------------------------------- //
+    res.global_pose = global_pose_;
+    res.prev_frame = previous_;
+    res.curr_frame = current_;
 
     previous_ = current_;
-
-    return true;
+    return res;
 }
 
 Sophus::SE3d VisualOdometry::currentPose() const
