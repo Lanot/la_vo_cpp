@@ -48,7 +48,7 @@ int main(int argc, char** argv)
         } else
         {
             visualizer->drawMatches(res.prev_frame, res.curr_frame, res.matches);
-            visualizer->drawPose(res.global_pose);
+            visualizer->drawPose(res.curr_frame->pose);
         }
     }
 

@@ -9,8 +9,8 @@ void OpenCvVisualizer::drawMatches(
 {
     cv::Mat vis;
 
-    std::cout << "Prev -> ID: " << prev->id << std::endl;
-    std::cout << "Curr -> ID: " << curr->id << std::endl;
+    // std::cout << "Prev -> ID: " << prev->id << std::endl;
+    // std::cout << "Curr -> ID: " << curr->id << std::endl;
 
     cv::drawMatches(
         prev->image,

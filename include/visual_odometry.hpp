@@ -18,13 +18,11 @@ public:
 private:
     CameraIntrinsics camera_intrinsics_;
 
-    Frame::Ptr previous_;
-    Frame::Ptr current_;
+    Frame::Ptr prev_frame_;
+    Sophus::SE3d global_pose_;
 
     FeatureTracker tracker_;
     PoseEstimator estimator_;
-
-    Sophus::SE3d global_pose_;
 
     double scale_ = 1.0;
 };

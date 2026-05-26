@@ -16,24 +16,23 @@ ProcessResult VisualOdometry::process(
 {
     ProcessResult res;
 
-    current_ = Frame::create();
-    current_->image = image.clone();
-    current_->timestamp = timestamp;
+    res.curr_frame = Frame::create();
+    res.curr_frame->image = image.clone();
+    res.curr_frame->timestamp = timestamp;
 
-    tracker_.extract(current_);
+    tracker_.extract(res.curr_frame);
 
-    res.prev_frame = previous_;
-    res.curr_frame = current_;
+    res.prev_frame = prev_frame_;
 
-    if (!previous_)
+    if (!prev_frame_)
     {
-        previous_ = current_;
+        prev_frame_ = res.curr_frame;
         return res;
     }
 
     res.matched = tracker_.match(
-        previous_,
-        current_,
+        prev_frame_,
+        res.curr_frame,
         res.matches,
         res.pts1,
         res.pts2
@@ -41,34 +40,31 @@ ProcessResult VisualOdometry::process(
 
     if (!res.matched)
     {
-        previous_ = current_;
+        prev_frame_ = res.curr_frame;
         return res;
     }
 
     std::vector<uchar> status;
+    Sophus::SE3d relative_pose;
 
     res.estimated = estimator_.estimate(
         res.pts1,
         res.pts2,
         camera_intrinsics_.K(),
-        res.relative_pose,
+        relative_pose,
         status
     );
 
     if (!res.estimated)
     {
-        previous_ = current_;
+        prev_frame_ = res.curr_frame;
         return res;
     }
 
-    global_pose_ = global_pose_ * res.relative_pose;
-    current_->pose = global_pose_;
+    global_pose_ = global_pose_ * relative_pose;
+    res.curr_frame->pose = global_pose_;
 
-    res.global_pose = global_pose_;
-    res.prev_frame = previous_;
-    res.curr_frame = current_;
-
-    previous_ = current_;
+    prev_frame_ = res.curr_frame;
     return res;
 }
 
