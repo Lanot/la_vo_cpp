@@ -14,7 +14,11 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    std::shared_ptr<IVisualizer> visualizer = std::make_shared<OpenCvVisualizer>();
+    std::shared_ptr<OpenCvVisualizer> vo_visualizer = std::make_shared<OpenCvVisualizer>();
+    std::shared_ptr<OpenCvVisualizer> gt_visualizer = std::make_shared<OpenCvVisualizer>();
+
+    //vo_visualizer->setPoseColor(cv::Scalar(255, 0, 0));
+    gt_visualizer->setPoseColor(cv::Scalar(0, 0, 255));
 
     CameraIntrinsics camera_intrinsics;
     if (!camera_intrinsics.loadFromYaml(argv[1]))
@@ -47,8 +51,9 @@ int main(int argc, char** argv)
             std::cout << "Pose estimation failed" << std::endl;
         } else
         {
-            visualizer->drawMatches(res.prev_frame, res.curr_frame, res.matches);
-            visualizer->drawPose(res.curr_frame->pose);
+            //gt_visualizer->drawPose(res.curr_frame->pose); // implement it
+            vo_visualizer->drawPose(res.curr_frame->pose);
+            vo_visualizer->drawMatches(res.prev_frame, res.curr_frame, res.matches);
         }
     }
 

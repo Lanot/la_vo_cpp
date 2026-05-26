@@ -11,6 +11,11 @@ OpenCvVisualizer::OpenCvVisualizer()
         );
 }
 
+void OpenCvVisualizer::setPoseColor(const cv::Scalar& pose_color)
+{
+    pose_color_ = pose_color;
+}
+
 void OpenCvVisualizer::drawMatches(
     Frame::Ptr prev,
     Frame::Ptr curr,
@@ -48,19 +53,19 @@ void OpenCvVisualizer::drawPose(
 
     cv::Point current_point(x, y);
 
-    if (!first_pose_)
+    if (!starting_point_)
     {
         cv::line(
             trajectory_,
             previous_point_,
             current_point,
-            cv::Scalar(0, 255, 0),
+            pose_color_,
             2
         );
     }
 
     previous_point_ = current_point;
-    first_pose_ = false;
+    starting_point_ = false;
 
     cv::imshow(
         "Trajectory",
