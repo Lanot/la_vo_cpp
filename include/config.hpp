@@ -13,16 +13,17 @@ struct CameraConfig
 class Config
 {
 protected:
-    bool loadFromYaml(const std::string& path);
+    void loadIntrinsics();
+    int precision_ = 4;
 
+    cv::FileStorage fs_;
     CameraConfig cam_;
-    int precision = 4;
+
 
 public:
     Config(const std::string& path);
-
-    cv::Mat K() const;
-
     bool validate() const;
-    void dump() const;
+
+    // intrinsic matrix
+    cv::Mat K() const;
 };

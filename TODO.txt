@@ -1,7 +1,9 @@
 LIST of TODO:
 
 1. Implement Minimal VO with static settings -> Done
-2. Parametrize Settings via cofig/params.yaml -> Pending
+
+2. Parametrize Settings via config/params.yaml -> In progress
+
 3. Add SIFT/SURF/SuperPoint|Superglue/etc matching methods-> Pending
 4. Add Triangulation-> Pending
 5. Add Optical Flow - optional-> Pending

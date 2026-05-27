@@ -5,7 +5,8 @@
 
 Config::Config(const std::string& path)
 {
-    loadFromYaml(path);
+    fs_ = readYaml(path);
+    loadIntrinsics();
 }
 
 cv::Mat Config::K() const
@@ -16,28 +17,14 @@ cv::Mat Config::K() const
         0, 0, 1);
 }
 
-bool Config::loadFromYaml(const std::string& path)
+void Config::loadIntrinsics()
 {
-    cv::FileStorage fs = readYaml(path);
-
-    cv::FileNode intrinsics = fs["camera"]["intrinsics"];
+    const cv::FileNode intrinsics = fs_["camera"]["intrinsics"];
     //
-    cam_.fx = roundWithPrecision((double)intrinsics["fx"], precision);
-    cam_.fy = roundWithPrecision((double)intrinsics["fy"], precision);
-    cam_.cx = roundWithPrecision((double)intrinsics["cx"], precision);
-    cam_.cy = roundWithPrecision((double)intrinsics["cy"], precision);
-
-    return true;
-}
-
-void Config::dump() const
-{
-    std::cout
-        << "Loaded camera intrinsics:" << std::endl
-        << "fx=" << cam_.fx << std::endl
-        << "fy=" << cam_.fy << std::endl
-        << "cx=" << cam_.cx << std::endl
-        << "cy=" << cam_.cy << std::endl;
+    cam_.fx = roundWithPrecision((double)intrinsics["fx"], precision_);
+    cam_.fy = roundWithPrecision((double)intrinsics["fy"], precision_);
+    cam_.cx = roundWithPrecision((double)intrinsics["cx"], precision_);
+    cam_.cy = roundWithPrecision((double)intrinsics["cy"], precision_);
 }
 
 bool Config::validate() const

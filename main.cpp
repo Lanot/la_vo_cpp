@@ -45,7 +45,8 @@ int main(int argc, char** argv)
         else if (!res.estimated)
         {
             std::cout << "Pose estimation failed" << std::endl;
-        } else
+        }
+        else
         {
             //gt_visualizer->drawPose(res.curr_frame->pose); // implement it
             vo_visualizer->drawPose(res.curr_frame->pose);
