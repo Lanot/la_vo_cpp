@@ -25,7 +25,7 @@ int main(int argc, char** argv)
     Config config(argv[1]);
     config.validate();
 
-    FeatureTracker tracker = FeatureTracker(config.trackerConfig());
+    FeatureTrackerORB tracker = FeatureTrackerORB(config.trackerConfig());
     PoseEstimator estimator = PoseEstimator(config.poseEstimatorConfig());
 
     VisualOdometry vo(config, tracker, estimator);

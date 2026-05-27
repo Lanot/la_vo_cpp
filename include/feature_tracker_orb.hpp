@@ -5,10 +5,10 @@
 #include "utils.hpp"
 #include "ifeature_tracker.hpp"
 
-class FeatureTracker : public IFeatureTracker
+class FeatureTrackerORB : public IFeatureTracker
 {
 public:
-    FeatureTracker(const TrackerConfig& config);
+    FeatureTrackerORB(const TrackerConfig& config);
 
     bool extract(Frame::Ptr frame);
 
@@ -25,4 +25,5 @@ protected:
 
     cv::Ptr<cv::BFMatcher> matcher_;
     cv::Ptr<cv::ORB> orb_;
+    cv::Ptr<cv::SIFT> sift_;
 };

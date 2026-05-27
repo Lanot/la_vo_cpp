@@ -1,6 +1,6 @@
-#include "feature_tracker.hpp"
+#include "feature_tracker_orb.hpp"
 
-FeatureTracker::FeatureTracker(const TrackerConfig& config)
+FeatureTrackerORB::FeatureTrackerORB(const TrackerConfig& config)
     : config_(config)
 {
     orb_ = cv::ORB::create(
@@ -15,10 +15,18 @@ FeatureTracker::FeatureTracker(const TrackerConfig& config)
         20             // fastThreshold
     );
 
+    // sift_ = cv::SIFT::create(
+    //     config_.sift_max_extract_features,  // nfeatures
+    //     3, // nOctaveLayers
+    //     0.04,  // contrastThreshold
+    //     10, // edgeThreshold
+    //     1.6); // sigma
+    //
+
     matcher_ = cv::BFMatcher::create(cv::NORM_HAMMING, false);
 }
 
-bool FeatureTracker::extract(Frame::Ptr frame)
+bool FeatureTrackerORB::extract(Frame::Ptr frame)
 {
     orb_->detectAndCompute(
         frame->image,
@@ -30,7 +38,7 @@ bool FeatureTracker::extract(Frame::Ptr frame)
     return !frame->keypoints.empty();
 }
 
-bool FeatureTracker::match(
+bool FeatureTrackerORB::match(
     Frame::Ptr prev,
     Frame::Ptr curr,
     std::vector<cv::DMatch>& good_matches,
@@ -43,7 +51,7 @@ bool FeatureTracker::match(
 
     for (std::vector<cv::DMatch>& m : matches2d)
     {
-        if ((m[0].distance < config_.orb_knn_distance_k * m[1].distance) && (m[0].distance < config_.orb_max_distance))
+        if (m[0].distance < config_.orb_knn_distance_k * m[1].distance) // && (m[0].distance < config_.orb_max_distance))
         {
             good_matches.push_back(m[0]);
 

@@ -39,6 +39,8 @@ struct TrackerConfig
     int orb_max_sorted_features = 100;
     int orb_min_valid_features = 20;
 
+    int sift_max_extract_features = 1000;
+
     double orb_max_distance = 20;
     double orb_knn_distance_k = 0.8;
 };

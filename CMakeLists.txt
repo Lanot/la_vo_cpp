@@ -21,7 +21,8 @@ add_executable(la_mono_vo
         src/frame.cpp
         src/config.cpp
         src/pose_estimator.cpp
-        src/feature_tracker.cpp
+        src/feature_tracker_orb.cpp
+        #src/feature_tracker_sift.cpp
         src/visual_odometry.cpp
         src/visualizer_opencv.cpp
 )
