@@ -2,10 +2,10 @@
 
 #include "frame.hpp"
 
-class FeatureTracker
+class IFeatureTracker
 {
 public:
-    virtual ~FeatureTracker() = default;
+    virtual ~IFeatureTracker() = default;
 
     virtual bool extract(Frame::Ptr frame) = 0;
 

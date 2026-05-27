@@ -1,4 +1,4 @@
-#include "opencv_visualizer.hpp"
+#include "visualizer_opencv.hpp"
 #include "visual_odometry.hpp"
 #include "visual_odometry_result.hpp"
 #include "utils.hpp"
@@ -14,8 +14,8 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    std::shared_ptr<OpenCvVisualizer> vo_visualizer = std::make_shared<OpenCvVisualizer>();
-    std::shared_ptr<OpenCvVisualizer> gt_visualizer = std::make_shared<OpenCvVisualizer>();
+    std::shared_ptr<VisualizerOpenCv> vo_visualizer = std::make_shared<VisualizerOpenCv>();
+    std::shared_ptr<VisualizerOpenCv> gt_visualizer = std::make_shared<VisualizerOpenCv>();
 
     vo_visualizer->setPoseColor(cv::Scalar(255, 0, 0));
     gt_visualizer->setPoseColor(cv::Scalar(0, 0, 255));

@@ -2,7 +2,7 @@
 
 #include "ivisualizer.hpp"
 
-class OpenCvVisualizer : public IVisualizer
+class VisualizerOpenCv : public IVisualizer
 {
 protected:
     cv::Mat trajectory_;
@@ -15,7 +15,7 @@ protected:
     cv::Scalar pose_color_ = cv::Scalar(0, 255, 0); // Green
 
 public:
-    OpenCvVisualizer();
+    VisualizerOpenCv();
 
     void setPoseColor(const cv::Scalar& pose_color);
 

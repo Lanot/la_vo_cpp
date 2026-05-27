@@ -1,8 +1,9 @@
 #pragma once
 
 #include "frame.hpp"
+#include "ifeature_tracker.hpp"
 
-class FeatureTracker
+class FeatureTracker : public IFeatureTracker
 {
 public:
     FeatureTracker();

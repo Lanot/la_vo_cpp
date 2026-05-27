@@ -1,7 +1,7 @@
-#include "opencv_visualizer.hpp"
+#include "visualizer_opencv.hpp"
 #include <iostream>
 
-OpenCvVisualizer::OpenCvVisualizer()
+VisualizerOpenCv::VisualizerOpenCv()
 {
     trajectory_ =
         cv::Mat::zeros(
@@ -11,12 +11,12 @@ OpenCvVisualizer::OpenCvVisualizer()
         );
 }
 
-void OpenCvVisualizer::setPoseColor(const cv::Scalar& pose_color)
+void VisualizerOpenCv::setPoseColor(const cv::Scalar& pose_color)
 {
     pose_color_ = pose_color;
 }
 
-void OpenCvVisualizer::drawMatches(
+void VisualizerOpenCv::drawMatches(
     Frame::Ptr prev,
     Frame::Ptr curr,
     const std::vector<cv::DMatch>& matches)
@@ -40,7 +40,7 @@ void OpenCvVisualizer::drawMatches(
     cv::waitKey(1);
 }
 
-void OpenCvVisualizer::drawPose(
+void VisualizerOpenCv::drawPose(
     const Sophus::SE3d& pose)
 {
     Eigen::Vector3d t =

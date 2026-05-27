@@ -23,7 +23,7 @@ add_executable(la_mono_vo
         src/pose_estimator.cpp
         src/feature_tracker.cpp
         src/visual_odometry.cpp
-        src/opencv_visualizer.cpp
+        src/visualizer_opencv.cpp
 )
 
 target_link_libraries(la_mono_vo
