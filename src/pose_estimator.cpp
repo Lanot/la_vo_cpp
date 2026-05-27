@@ -12,7 +12,7 @@ bool PoseEstimator::estimate(
     Sophus::SE3d& relative_pose,
     std::vector<uchar>& status)
 {
-    if (pts1.size() < 8)
+    if (pts1.size() < config_.min_pts)
         return false;
 
     cv::Mat mask;
@@ -22,8 +22,8 @@ bool PoseEstimator::estimate(
         pts2,
         K,
         cv::RANSAC,
-        0.999,
-        1.0,
+        config_.essential_prob,
+        config_.essential_threshold,
         mask
     );
 

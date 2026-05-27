@@ -10,7 +10,7 @@ Config::Config(const std::string& path)
     loadIntrinsics();
     loadOptimization();
     loadPoseEstimator();
-    loadTrackingFeatureOrb();
+    loadTracking();
 }
 
 bool Config::validate() const
@@ -45,6 +45,12 @@ PoseEstimatorConfig Config::poseEstimatorConfig() const
     return pose_estimator_config_;
 }
 
+TrackerConfig Config::trackerConfig() const
+{
+    return tracker_;
+}
+
+
 void Config::loadIntrinsics()
 {
     const cv::FileNode intrinsics = fs_["camera"]["intrinsics"];
@@ -67,13 +73,25 @@ void Config::loadPoseEstimator()
     const cv::FileNode est = fs_["estimation"];
     //
     est["min_pts"] >> pose_estimator_config_.min_pts;
+    est["min_inliers"] >> pose_estimator_config_.min_inliers;
     est["essential_prob"] >> pose_estimator_config_.essential_prob;
     est["essential_threshold"] >> pose_estimator_config_.essential_threshold;
 }
 
-void Config::loadTrackingFeatureOrb()
+void Config::loadTracking()
 {
-    const cv::FileNode tracking = fs_["tracking"];
-    //
+    const cv::FileNode tr = fs_["tracking"];
 
+    tr["max_extract_features"] >> tracker_.max_extract_features;
+    tr["max_sorted_features"] >> tracker_.max_sorted_features;
+    tr["min_valid_features"] >> tracker_.min_valid_features;
+
+    std::string feature_type = (std::string)tr["feature_type"];
+    if (feature_type == "sift")
+    {
+        tracker_.feature_type = FeatureType::SIFT;
+    } else
+    {
+        tracker_.feature_type = FeatureType::ORB;
+    }
 }

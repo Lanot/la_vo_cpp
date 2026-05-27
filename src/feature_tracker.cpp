@@ -1,8 +1,9 @@
 #include "feature_tracker.hpp"
 
-FeatureTracker::FeatureTracker()
+FeatureTracker::FeatureTracker(const TrackerConfig& config)
+    : config_(config)
 {
-    orb_ = cv::ORB::create(2000);
+    orb_ = cv::ORB::create(config_.max_extract_features);
 }
 
 bool FeatureTracker::extract(Frame::Ptr frame)
@@ -34,17 +35,13 @@ bool FeatureTracker::match(
         matches
     );
 
-    double min_dist = 9999;
+    sortDMatches(matches);
+
+    matches.resize(config_.max_sorted_features);
 
     for (auto& m : matches)
     {
-        if (m.distance < min_dist)
-            min_dist = m.distance;
-    }
-
-    for (auto& m : matches)
-    {
-        if (m.distance <= std::max(2.0 * min_dist, 30.0))
+        if (m.distance <= config_.orb_max_distance)
         {
             good_matches.push_back(m);
 

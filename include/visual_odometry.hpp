@@ -9,7 +9,7 @@
 class VisualOdometry
 {
 public:
-    explicit VisualOdometry(Config& config, FeatureTracker& tracker, PoseEstimator& estimator);
+    explicit VisualOdometry(const Config& config, const FeatureTracker& tracker, const PoseEstimator& estimator);
 
     VisualOdometryResult process(const cv::Mat& image, double timestamp);
 
@@ -20,8 +20,8 @@ protected:
     Sophus::SE3d global_pose_;
 
     Config config_;
-    FeatureTracker& tracker_;
-    PoseEstimator& estimator_;
+    FeatureTracker tracker_;
+    PoseEstimator estimator_;
 
     double scale_ = 1.0;
 };

@@ -3,7 +3,7 @@
 #include "visual_odometry.hpp"
 #include "visual_odometry_result.hpp"
 
-VisualOdometry::VisualOdometry(Config& config, FeatureTracker& tracker, PoseEstimator& estimator)
+VisualOdometry::VisualOdometry(const Config& config, const FeatureTracker& tracker, const PoseEstimator& estimator)
     : config_(config), tracker_(tracker), estimator_(estimator)
 {
     global_pose_ = Sophus::SE3d();

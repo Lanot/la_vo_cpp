@@ -1,12 +1,14 @@
 #pragma once
 
+#include "config.hpp"
 #include "frame.hpp"
+#include "utils.hpp"
 #include "ifeature_tracker.hpp"
 
 class FeatureTracker : public IFeatureTracker
 {
 public:
-    FeatureTracker();
+    FeatureTracker(const TrackerConfig& config);
 
     bool extract(Frame::Ptr frame);
 
@@ -19,5 +21,7 @@ public:
     );
 
 protected:
+    TrackerConfig config_;
+
     cv::Ptr<cv::ORB> orb_;
 };

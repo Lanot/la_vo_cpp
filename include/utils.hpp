@@ -14,3 +14,5 @@ std::vector<std::string> loadPosesFromPath(const std::string& file);
 cv::FileStorage readYaml(const std::string& path);
 
 Sophus::SE3d kittiLinePoseToSophusPose(std::string line);
+
+void sortDMatches(std::vector<cv::DMatch>& matches);

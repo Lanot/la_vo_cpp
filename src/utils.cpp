@@ -89,3 +89,15 @@ Sophus::SE3d kittiLinePoseToSophusPose(std::string line)
 
     return Sophus::SE3d(R, t);
 }
+
+void sortDMatches(std::vector<cv::DMatch>& matches)
+{
+    std::sort(
+        matches.begin(),
+        matches.end(),
+        [](const cv::DMatch& a, const cv::DMatch& b)
+        {
+            return a.distance < b.distance;
+        }
+    );
+}
