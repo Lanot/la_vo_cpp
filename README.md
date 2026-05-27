@@ -17,7 +17,8 @@ sudo make install
 ```
 mkdir -p build && cd build && cmake .. && make -j$(nproc)
 
-./la_mono_vo ./../config/vo.yaml /mnt/Shared/datasets/kitti/data_odometry_gray/dataset/sequences/00/image_0
+./la_mono_vo ./../config/vo.yaml /mnt/Shared/datasets/kitti/data_odometry_gray/dataset/sequences/00/image_0 /mnt/Shared/datasets/kitti/data_odometry_poses/dataset/poses/00.txt
+
 ```
 
 

@@ -8,31 +8,30 @@
 
 int main(int argc, char** argv)
 {
-    if (argc < 3)
+    if (argc < 4)
     {
-        std::cout << "Usage: ./la_mono_vo path_to_config/vo.yaml path_to_images" << std::endl;
+        std::cout << "Usage: ./la_mono_vo path_to_config/vo.yaml path_to_images path_to_ground_truth_file" << std::endl;
         return -1;
     }
 
     std::shared_ptr<OpenCvVisualizer> vo_visualizer = std::make_shared<OpenCvVisualizer>();
     std::shared_ptr<OpenCvVisualizer> gt_visualizer = std::make_shared<OpenCvVisualizer>();
 
-    //vo_visualizer->setPoseColor(cv::Scalar(255, 0, 0));
+    vo_visualizer->setPoseColor(cv::Scalar(255, 0, 0));
     gt_visualizer->setPoseColor(cv::Scalar(0, 0, 255));
 
     Config config(argv[1]);
     config.validate();
 
     VisualOdometry vo(config);
-
-    auto images = loadImagesFromPath(argv[2]);
-
     ProcessResult res;
+
+    std::vector<std::string> images = loadImagesFromPath(argv[2]);
+    std::vector<std::string> gt_poses = loadPosesFromPath(argv[3]);
 
     for (size_t i = 0; i < images.size(); ++i)
     {
         cv::Mat img = cv::imread(images[i], cv::IMREAD_GRAYSCALE);
-
         if (img.empty())
             continue;
 
@@ -48,7 +47,12 @@ int main(int argc, char** argv)
         }
         else
         {
-            //gt_visualizer->drawPose(res.curr_frame->pose); // implement it
+            // Draw Kitti Ground Truth Pose
+            std::cout << "Pose estimation succeeded: #" << i << std::endl;
+            Sophus::SE3d tg_pose = kittiLinePoseToSophusPose(gt_poses[i]);
+            gt_visualizer->drawPose(tg_pose);
+
+            // Draw VO Estimation Pose and Matches
             vo_visualizer->drawPose(res.curr_frame->pose);
             vo_visualizer->drawMatches(res.prev_frame, res.curr_frame, res.matches);
         }
