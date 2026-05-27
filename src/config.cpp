@@ -85,11 +85,14 @@ void Config::loadTracking()
     tr["orb_max_extract_features"] >> tracker_.orb_max_extract_features;
     tr["orb_max_sorted_features"] >> tracker_.orb_max_sorted_features;
     tr["orb_min_valid_features"] >> tracker_.orb_min_valid_features;
-    tr["orb_max_distance"] >> tracker_.orb_max_distance;
+    // tr["orb_max_distance"] >> tracker_.orb_max_distance;
     tr["orb_knn_distance_k"] >> tracker_.orb_knn_distance_k;
 
     tr["sift_max_extract_features"] >> tracker_.sift_max_extract_features;
-
+    tr["sift_max_sorted_features"] >> tracker_.sift_max_sorted_features;
+    tr["sift_min_valid_features"] >> tracker_.sift_min_valid_features;
+    // tr["sift_max_distance"] >> tracker_.sift_max_distance;
+    tr["sift_knn_distance_k"] >> tracker_.sift_knn_distance_k;
 
     std::string feature_type = (std::string)tr["feature_type"];
     if (feature_type == "sift")

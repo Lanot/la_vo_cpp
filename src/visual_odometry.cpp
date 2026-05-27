@@ -3,8 +3,13 @@
 #include "visual_odometry.hpp"
 #include "visual_odometry_result.hpp"
 
-VisualOdometry::VisualOdometry(const Config& config, const FeatureTrackerORB& tracker, const PoseEstimator& estimator)
-    : config_(config), tracker_(tracker), estimator_(estimator)
+VisualOdometry::VisualOdometry(
+    Config& config,
+    std::shared_ptr<IFeatureTracker> tracker,
+    std::shared_ptr<PoseEstimator> estimator
+) : config_(config),
+    tracker_(tracker),
+    estimator_(estimator)
 {
     global_pose_ = Sophus::SE3d();
 }
@@ -19,7 +24,7 @@ VisualOdometryResult VisualOdometry::process(
     res.curr_frame->image = image.clone();
     res.curr_frame->timestamp = timestamp;
 
-    tracker_.extract(res.curr_frame);
+    tracker_->extract(res.curr_frame);
 
     res.prev_frame = prev_frame_;
 
@@ -29,7 +34,7 @@ VisualOdometryResult VisualOdometry::process(
         return res;
     }
 
-    res.matched = tracker_.match(
+    res.matched = tracker_->match(
         prev_frame_,
         res.curr_frame,
         res.matches,
@@ -46,7 +51,7 @@ VisualOdometryResult VisualOdometry::process(
     std::vector<uchar> status;
     Sophus::SE3d relative_pose;
 
-    res.estimated = estimator_.estimate(
+    res.estimated = estimator_->estimate(
         res.pts1,
         res.pts2,
         config_.K(),

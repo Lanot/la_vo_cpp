@@ -36,6 +36,3 @@ tracking:
   sift_max_extract_features: 2000
   sift_max_sorted_features: 100
   sift_min_valid_features: 20
-
-  surf_max_distance: 0.1        # ORB L2 Distance: 0.1–0.3
-  super_point_max_distance: 0.2 # ORB L2/Cosine Distance: 0.2–0.6

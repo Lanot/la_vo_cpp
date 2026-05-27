@@ -1,6 +1,7 @@
 #include "visualizer_opencv.hpp"
 #include "visual_odometry.hpp"
 #include "visual_odometry_result.hpp"
+#include "feature_tracker_factory.hpp"
 #include "utils.hpp"
 
 #include <vector>
@@ -25,8 +26,8 @@ int main(int argc, char** argv)
     Config config(argv[1]);
     config.validate();
 
-    FeatureTrackerORB tracker = FeatureTrackerORB(config.trackerConfig());
-    PoseEstimator estimator = PoseEstimator(config.poseEstimatorConfig());
+    auto tracker = FeatureTrackerFactory::create(config.trackerConfig());
+    auto estimator = std::make_shared<PoseEstimator>(config.poseEstimatorConfig());
 
     VisualOdometry vo(config, tracker, estimator);
 
