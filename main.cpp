@@ -47,14 +47,21 @@ int main(int argc, char** argv)
         }
         else
         {
-            // Draw Kitti Ground Truth Pose
             std::cout << "Pose estimation succeeded: #" << i << std::endl;
-            Sophus::SE3d tg_pose = kittiLinePoseToSophusPose(gt_poses[i]);
-            gt_visualizer->drawPose(tg_pose);
 
             // Draw VO Estimation Pose and Matches
             vo_visualizer->drawPose(res.curr_frame->pose);
             vo_visualizer->drawMatches(res.prev_frame, res.curr_frame, res.matches);
+
+            Eigen::Vector3d vo_t = res.curr_frame->pose.translation();
+            std::cout << "VO POSE: X: " << vo_t.x() << "  Y: " << vo_t.y() << std::endl;
+
+            // Draw Kitti Ground Truth Pose
+            Sophus::SE3d tg_pose = kittiLinePoseToSophusPose(gt_poses[i]);
+            gt_visualizer->drawPose(tg_pose);
+
+            Eigen::Vector3d gt_t = tg_pose.translation();
+            std::cout << "GT POSE: X: " << gt_t.x() << "  Y: " << gt_t.y() << std::endl;
         }
     }
 

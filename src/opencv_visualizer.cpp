@@ -46,7 +46,7 @@ void OpenCvVisualizer::drawPose(
     Eigen::Vector3d t =
         pose.translation();
 
-    std::cout << "POSE: X: " << t.x() << "  Y: " << t.y() << std::endl;
+    //std::cout << "POSE: X: " << t.x() << "  Y: " << t.y() << std::endl;
 
     int x = static_cast<int>(t.x() * 1.5) + static_cast<int>(trajectory_cols_px_ / 2);
     int y = static_cast<int>(t.y() * 1.5) + static_cast<int>(trajectory_rows_px_ / 2);
