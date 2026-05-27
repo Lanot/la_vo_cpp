@@ -21,6 +21,7 @@ int main(int argc, char** argv)
     gt_visualizer->setPoseColor(cv::Scalar(0, 0, 255));
 
     Config config(argv[1]);
+    config.validate();
 
     VisualOdometry vo(config);
 

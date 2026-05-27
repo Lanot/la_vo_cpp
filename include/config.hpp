@@ -23,5 +23,6 @@ public:
 
     cv::Mat K() const;
 
+    bool validate() const;
     void dump() const;
 };

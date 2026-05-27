@@ -20,12 +20,12 @@ bool Config::loadFromYaml(const std::string& path)
 {
     cv::FileStorage fs = readYaml(path);
 
-    cv::FileNode cam = fs["camera_intrinsics"];
-
-    cam_.fx = roundWithPrecision((double)cam["fx"], precision);
-    cam_.fy = roundWithPrecision((double)cam["fy"], precision);
-    cam_.cx = roundWithPrecision((double)cam["cx"], precision);
-    cam_.cy = roundWithPrecision((double)cam["cy"], precision);
+    cv::FileNode intrinsics = fs["camera"]["intrinsics"];
+    //
+    cam_.fx = roundWithPrecision((double)intrinsics["fx"], precision);
+    cam_.fy = roundWithPrecision((double)intrinsics["fy"], precision);
+    cam_.cx = roundWithPrecision((double)intrinsics["cx"], precision);
+    cam_.cy = roundWithPrecision((double)intrinsics["cy"], precision);
 
     return true;
 }
@@ -38,4 +38,14 @@ void Config::dump() const
         << "fy=" << cam_.fy << std::endl
         << "cx=" << cam_.cx << std::endl
         << "cy=" << cam_.cy << std::endl;
+}
+
+bool Config::validate() const
+{
+    if (!(cam_.fx > 0 && cam_.fy > 0 && cam_.cx > 0 && cam_.cy > 0))
+    {
+        throw std::invalid_argument("Invalid camera intrinsics configuration.");
+    }
+
+    return true;
 }
