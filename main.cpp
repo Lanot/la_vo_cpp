@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 {
     if (argc < 3)
     {
-        std::cout << "Usage: ./la_mono_vo path_to_config/camera.yaml path_to_images" << std::endl;
+        std::cout << "Usage: ./la_mono_vo path_to_config/vo.yaml path_to_images" << std::endl;
         return -1;
     }
 
@@ -20,16 +20,11 @@ int main(int argc, char** argv)
     //vo_visualizer->setPoseColor(cv::Scalar(255, 0, 0));
     gt_visualizer->setPoseColor(cv::Scalar(0, 0, 255));
 
-    CameraIntrinsics camera_intrinsics;
-    if (!camera_intrinsics.loadFromYaml(argv[1]))
-    {
-        std::cout << "ERROR: Can't load camera parameters." << std::endl;
-        return -1;
-    }
+    Config config(argv[1]);
 
-    VisualOdometry vo(camera_intrinsics);
+    VisualOdometry vo(config);
 
-    auto images = loadImages(argv[2]);
+    auto images = loadImagesFromPath(argv[2]);
 
     ProcessResult res;
 

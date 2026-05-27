@@ -17,6 +17,6 @@ public:
         std::vector<cv::Point2f>& pts2
     );
 
-private:
+protected:
     cv::Ptr<cv::ORB> orb_;
 };

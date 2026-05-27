@@ -17,27 +17,28 @@ sudo make install
 ```
 mkdir -p build && cd build && cmake .. && make -j$(nproc)
 
-./la_mono_vo ./../config/camera.yaml /mnt/Shared/datasets/kitti/data_odometry_gray/dataset/sequences/00/image_0
+./la_mono_vo ./../config/vo.yaml /mnt/Shared/datasets/kitti/data_odometry_gray/dataset/sequences/00/image_0
 ```
 
 
 # Calibration
 ```
-File: config/camera.yaml
+File: config/vo.yaml
 
 %YAML:1.0
 
-# KITTI get P0 values from calib.txt
-#  fx = P0.values[0]
-#  fy = P0.values[5]
-#  cx = P0.values[2]
-#  cy = P0.values[6]
-
-camera:
+camera_intrinsics:
   fx: 718.856   #  7.188560000000e+02
   fy: 718.856   #  7.188560000000e+02
   cx: 607.1928  #  6.071928000000e+02
   cy: 185.2157  #  1.852157000000e+02
+
+  # KITTI get P0 values from calib.txt
+  #  fx = P0.values[0]
+  #  fy = P0.values[5]
+  #  cx = P0.values[2]
+  #  cy = P0.values[6]
+
 ```
 
 ```

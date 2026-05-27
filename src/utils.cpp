@@ -4,7 +4,13 @@
 #include <algorithm>
 #include <cmath>
 
-std::vector<std::string> loadImages(const std::string& folder)
+double roundWithPrecision(double value, int precision)
+{
+    double power_of_10 = std::pow(10.0, precision);
+    return std::round(value * power_of_10) / power_of_10;
+}
+
+std::vector<std::string> loadImagesFromPath(const std::string& folder)
 {
     std::vector<std::string> files;
 
@@ -18,8 +24,16 @@ std::vector<std::string> loadImages(const std::string& folder)
     return files;
 }
 
-double round_with_precision(double value, int precision)
+cv::FileStorage readYaml(const std::string& path)
 {
-    double power_of_10 = std::pow(10.0, precision);
-    return std::round(value * power_of_10) / power_of_10;
+    cv::FileStorage fs(path, cv::FileStorage::READ);
+
+    if (!fs.isOpened())
+    {
+        throw std::invalid_argument(
+            std::format("Failed to open file: {}", path)
+        );
+    }
+
+    return fs;
 }

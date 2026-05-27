@@ -4,8 +4,8 @@
 #include "visual_odometry.hpp"
 #include "process_result.hpp"
 
-VisualOdometry::VisualOdometry(const CameraIntrinsics& camera_intrinsics)
-    : camera_intrinsics_(camera_intrinsics)
+VisualOdometry::VisualOdometry(const Config& config)
+    : config_(config)
 {
     global_pose_ = Sophus::SE3d();
 }
@@ -50,7 +50,7 @@ ProcessResult VisualOdometry::process(
     res.estimated = estimator_.estimate(
         res.pts1,
         res.pts2,
-        camera_intrinsics_.K(),
+        config_.K(),
         relative_pose,
         status
     );

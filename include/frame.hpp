@@ -21,6 +21,6 @@ public:
 
     static Ptr create();
 
-private:
+protected:
     static uint64_t next_id_;
 };

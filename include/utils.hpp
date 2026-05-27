@@ -1,8 +1,12 @@
 #pragma once
 
+#include <opencv2/opencv.hpp>
 #include <string>
 #include <vector>
+#include <format>
 
-std::vector<std::string> loadImages(const std::string& folder);
+double roundWithPrecision(double value, int precision);
 
-double round_with_precision(double value, int precision);
+std::vector<std::string> loadImagesFromPath(const std::string& folder);
+
+cv::FileStorage readYaml(const std::string& path);

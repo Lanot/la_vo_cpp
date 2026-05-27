@@ -4,7 +4,7 @@
 
 class OpenCvVisualizer : public IVisualizer
 {
-private:
+protected:
     cv::Mat trajectory_;
     cv::Point previous_point_;
     bool starting_point_ = true;

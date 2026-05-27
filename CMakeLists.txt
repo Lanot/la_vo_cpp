@@ -16,10 +16,10 @@ include_directories(
 )
 
 add_executable(la_mono_vo
-        src/main.cpp
+        main.cpp
         src/utils.cpp
         src/frame.cpp
-        src/camera_intrinsics.cpp
+        src/config.cpp
         src/pose_estimator.cpp
         src/feature_tracker.cpp
         src/visual_odometry.cpp
