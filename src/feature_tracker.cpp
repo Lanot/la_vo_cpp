@@ -55,5 +55,5 @@ bool FeatureTracker::match(
         }
     }
 
-    return good_matches.size() >= 20;
+    return good_matches.size() >= config_.min_valid_features;
 }
