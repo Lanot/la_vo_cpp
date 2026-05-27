@@ -25,10 +25,11 @@ tracking:
   feature_type: orb
 
   # ORB
-  orb_max_distance: 10  # ORB Hamming Distance: 20–40
+  orb_max_distance:   20     # ORB Hamming Distance: 20–40
+  orb_knn_distance_k: 0.75 # Smaller ratio = stricter ambiguity check
   orb_max_extract_features: 2000
-  orb_max_sorted_features: 100
-  orb_min_valid_features: 20
+  orb_max_sorted_features:  100
+  orb_min_valid_features:   20
 
   sift_max_distance: 100        # ORB L2 Distance: 100–250
   surf_max_distance: 0.1        # ORB L2 Distance: 0.1–0.3

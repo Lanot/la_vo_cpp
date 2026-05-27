@@ -37,33 +37,53 @@ bool FeatureTracker::match(
     std::vector<cv::Point2f>& pts1,
     std::vector<cv::Point2f>& pts2)
 {
-    std::vector<cv::DMatch> matches;
+    std::vector<std::vector<cv::DMatch>> matches2d;
 
-    matcher_->match(
-        prev->descriptors,
-        curr->descriptors,
-        matches
-    );
+    matcher_->knnMatch(prev->descriptors, curr->descriptors, matches2d, 2);
 
-    sortDMatches(matches);
-
-    matches.resize(config_.orb_max_sorted_features);
-
-    for (auto& m : matches)
+    for (std::vector<cv::DMatch>& m : matches2d)
     {
-        if (m.distance <= config_.orb_max_distance)
+        if ((m[0].distance < config_.orb_knn_distance_k * m[1].distance) && (m[0].distance < config_.orb_max_distance))
         {
-            good_matches.push_back(m);
+            good_matches.push_back(m[0]);
 
             pts1.push_back(
-                prev->keypoints[m.queryIdx].pt
+                prev->keypoints[m[0].queryIdx].pt
             );
 
             pts2.push_back(
-                curr->keypoints[m.trainIdx].pt
+                curr->keypoints[m[0].trainIdx].pt
             );
         }
     }
+
+    // good_matches.resize(config_.orb_max_sorted_features);
+    // pts1.resize(config_.orb_max_sorted_features);
+    // pts2.resize(config_.orb_max_sorted_features);
+
+    // std::vector<cv::DMatch> matches;
+    // matcher_->match(
+    //     prev->descriptors,
+    //     curr->descriptors,
+    //     matches
+    // );
+    // sort1DMatches(matches);
+    //matches.resize(config_.orb_max_sorted_features);
+    // for (auto& m : matches)
+    // {
+    //     if (m.distance <= config_.orb_max_distance)
+    //     {
+    //         good_matches.push_back(m);
+    //
+    //         pts1.push_back(
+    //             prev->keypoints[m.queryIdx].pt
+    //         );
+    //
+    //         pts2.push_back(
+    //             curr->keypoints[m.trainIdx].pt
+    //         );
+    //     }
+    // }
 
     return good_matches.size() >= config_.orb_min_valid_features;
 }

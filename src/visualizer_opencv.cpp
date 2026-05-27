@@ -21,6 +21,9 @@ void VisualizerOpenCv::drawMatches(
     Frame::Ptr curr,
     const std::vector<cv::DMatch>& matches)
 {
+    if (matches.empty())
+        return;
+
     cv::Mat vis;
 
     // std::cout << "Prev -> ID: " << prev->id << std::endl;

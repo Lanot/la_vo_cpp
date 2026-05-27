@@ -40,6 +40,7 @@ struct TrackerConfig
     int orb_min_valid_features = 20;
 
     double orb_max_distance = 20;
+    double orb_knn_distance_k = 0.8;
 };
 
 
