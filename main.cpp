@@ -25,6 +25,7 @@ int main(int argc, char** argv)
 
     VisualOdometry vo(config);
     ProcessResult res;
+    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
 
     std::vector<std::string> images = loadImagesFromPath(argv[2]);
     std::vector<std::string> gt_poses = loadPosesFromPath(argv[3]);
@@ -32,6 +33,12 @@ int main(int argc, char** argv)
     for (size_t i = 0; i < images.size(); ++i)
     {
         cv::Mat img = cv::imread(images[i], cv::IMREAD_GRAYSCALE);
+
+        if (config.O().use_clahe)
+        {
+            clahe->apply(img, img);
+        }
+
         if (img.empty())
             continue;
 

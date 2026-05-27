@@ -7,6 +7,7 @@ Config::Config(const std::string& path)
 {
     fs_ = readYaml(path);
     loadIntrinsics();
+    loadOptimization();
 }
 
 cv::Mat Config::K() const
@@ -27,6 +28,13 @@ void Config::loadIntrinsics()
     cam_.cy = roundWithPrecision((double)intrinsics["cy"], precision_);
 }
 
+void Config::loadOptimization()
+{
+    const cv::FileNode opt = fs_["optimization"];
+    //
+    opt["use_clahe"] >> optimization_.use_clahe;
+}
+
 bool Config::validate() const
 {
     if (!(cam_.fx > 0 && cam_.fy > 0 && cam_.cx > 0 && cam_.cy > 0))
@@ -35,4 +43,9 @@ bool Config::validate() const
     }
 
     return true;
+}
+
+OptimizationConfig Config::O() const
+{
+    return optimization_;
 }
