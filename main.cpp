@@ -20,12 +20,15 @@ int main(int argc, char** argv)
     vo_visualizer->setPoseColor(cv::Scalar(255, 0, 0));
     gt_visualizer->setPoseColor(cv::Scalar(0, 0, 255));
 
+    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
+
     Config config(argv[1]);
     config.validate();
 
-    VisualOdometry vo(config);
-    ProcessResult res;
-    cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
+    FeatureTracker tracker = FeatureTracker();
+    PoseEstimator estimator = PoseEstimator(config.poseEstimatorConfig());
+
+    VisualOdometry vo(config, tracker, estimator);
 
     std::vector<std::string> images = loadImagesFromPath(argv[2]);
     std::vector<std::string> gt_poses = loadPosesFromPath(argv[3]);
@@ -34,7 +37,7 @@ int main(int argc, char** argv)
     {
         cv::Mat img = cv::imread(images[i], cv::IMREAD_GRAYSCALE);
 
-        if (config.O().use_clahe)
+        if (config.optimizationConfig().use_clahe)
         {
             clahe->apply(img, img);
         }
@@ -42,7 +45,7 @@ int main(int argc, char** argv)
         if (img.empty())
             continue;
 
-        res = vo.process(img, i * 0.1);
+        ProcessResult res = vo.process(img, i * 0.1);
 
         if (!res.matched)
         {

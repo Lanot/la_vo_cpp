@@ -14,3 +14,13 @@ camera:
 
 optimization:
   use_clahe: 1
+
+estimation:
+  min_pts: 10
+  essential_prob: 0.9999
+  essential_threshold: 1.0
+
+tracking:
+  orb:
+    a: 1
+    b: 2

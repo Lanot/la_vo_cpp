@@ -1,11 +1,10 @@
 #include <vector>
-#include <iostream>
 
 #include "visual_odometry.hpp"
 #include "process_result.hpp"
 
-VisualOdometry::VisualOdometry(const Config& config)
-    : config_(config)
+VisualOdometry::VisualOdometry(Config& config, FeatureTracker& tracker, PoseEstimator& estimator)
+    : config_(config), tracker_(tracker), estimator_(estimator)
 {
     global_pose_ = Sophus::SE3d();
 }

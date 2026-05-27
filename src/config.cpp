@@ -6,8 +6,24 @@
 Config::Config(const std::string& path)
 {
     fs_ = readYaml(path);
+
     loadIntrinsics();
     loadOptimization();
+    loadPoseEstimator();
+    loadTrackingFeatureOrb();
+}
+
+bool Config::validate() const
+{
+    if (!(cam_.fx > 0 && cam_.fy > 0 && cam_.cx > 0 && cam_.cy > 0))
+    {
+        throw std::invalid_argument("Invalid camera intrinsics configuration.");
+    }
+
+    // @todo: validate estimation
+    // @todo: validate orb
+
+    return true;
 }
 
 cv::Mat Config::K() const
@@ -16,6 +32,17 @@ cv::Mat Config::K() const
         cam_.fx, 0, cam_.cx,
         0, cam_.fy, cam_.cy,
         0, 0, 1);
+}
+
+
+OptimizationConfig Config::optimizationConfig() const
+{
+    return optimization_;
+}
+
+PoseEstimatorConfig Config::poseEstimatorConfig() const
+{
+    return pose_estimator_config_;
 }
 
 void Config::loadIntrinsics()
@@ -35,17 +62,18 @@ void Config::loadOptimization()
     opt["use_clahe"] >> optimization_.use_clahe;
 }
 
-bool Config::validate() const
+void Config::loadPoseEstimator()
 {
-    if (!(cam_.fx > 0 && cam_.fy > 0 && cam_.cx > 0 && cam_.cy > 0))
-    {
-        throw std::invalid_argument("Invalid camera intrinsics configuration.");
-    }
-
-    return true;
+    const cv::FileNode est = fs_["estimation"];
+    //
+    est["min_pts"] >> pose_estimator_config_.min_pts;
+    est["essential_prob"] >> pose_estimator_config_.essential_prob;
+    est["essential_threshold"] >> pose_estimator_config_.essential_threshold;
 }
 
-OptimizationConfig Config::O() const
+void Config::loadTrackingFeatureOrb()
 {
-    return optimization_;
+    const cv::FileNode tracking = fs_["tracking"];
+    //
+
 }

@@ -1,5 +1,10 @@
 #include "pose_estimator.hpp"
 
+PoseEstimator::PoseEstimator(const PoseEstimatorConfig& config)
+    : config_(config)
+{
+}
+
 bool PoseEstimator::estimate(
     const std::vector<cv::Point2f>& pts1,
     const std::vector<cv::Point2f>& pts2,
