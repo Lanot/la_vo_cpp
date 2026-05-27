@@ -7,5 +7,5 @@
 class FeatureTrackerFactory
 {
 public:
-    static std::shared_ptr<IFeatureTracker> create(const TrackerConfig& config);
+    static std::unique_ptr<IFeatureTracker> create(const TrackerConfig& config);
 };

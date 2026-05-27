@@ -4,12 +4,12 @@
 #include "visual_odometry_result.hpp"
 
 VisualOdometry::VisualOdometry(
-    Config& config,
-    std::shared_ptr<IFeatureTracker> tracker,
-    std::shared_ptr<PoseEstimator> estimator
+    std::shared_ptr<Config> config,
+    std::unique_ptr<IFeatureTracker> tracker,
+    std::unique_ptr<PoseEstimator> estimator
 ) : config_(config),
-    tracker_(tracker),
-    estimator_(estimator)
+    tracker_(std::move(tracker)),
+    estimator_(std::move(estimator))
 {
     global_pose_ = Sophus::SE3d();
 }
@@ -54,7 +54,7 @@ VisualOdometryResult VisualOdometry::process(
     res.estimated = estimator_->estimate(
         res.pts1,
         res.pts2,
-        config_.K(),
+        config_->K(),
         relative_pose,
         status
     );

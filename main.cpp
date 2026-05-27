@@ -23,13 +23,13 @@ int main(int argc, char** argv)
 
     cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
 
-    Config config(argv[1]);
-    config.validate();
+    auto config = std::make_shared<Config>(argv[1]);
+    config->validate();
 
-    auto tracker = FeatureTrackerFactory::create(config.trackerConfig());
-    auto estimator = std::make_shared<PoseEstimator>(config.poseEstimatorConfig());
+    auto tracker = FeatureTrackerFactory::create(config->trackerConfig());
+    auto estimator = std::make_unique<PoseEstimator>(config->poseEstimatorConfig());
 
-    VisualOdometry vo(config, tracker, estimator);
+    VisualOdometry vo(config, std::move(tracker), std::move(estimator));
 
     std::vector<std::string> images = loadImagesFromPath(argv[2]);
     std::vector<std::string> gt_poses = loadPosesFromPath(argv[3]);
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
     {
         cv::Mat img = cv::imread(images[i], cv::IMREAD_GRAYSCALE);
 
-        if (config.optimizationConfig().use_clahe)
+        if (config->optimizationConfig().use_clahe)
         {
             clahe->apply(img, img);
         }

@@ -10,9 +10,9 @@ class VisualOdometry
 {
 public:
     explicit VisualOdometry(
-        Config& config,
-        std::shared_ptr<IFeatureTracker> tracker,
-        std::shared_ptr<PoseEstimator> estimator
+        std::shared_ptr<Config> config,
+        std::unique_ptr<IFeatureTracker> tracker,
+        std::unique_ptr<PoseEstimator> estimator
     );
 
     VisualOdometryResult process(const cv::Mat& image, double timestamp);
@@ -23,10 +23,9 @@ protected:
     Frame::Ptr prev_frame_;
     Sophus::SE3d global_pose_;
 
-    Config& config_;
-
-    std::shared_ptr<IFeatureTracker> tracker_;
-    std::shared_ptr<PoseEstimator> estimator_;
+    std::shared_ptr<Config> config_;
+    std::unique_ptr<IFeatureTracker> tracker_;
+    std::unique_ptr<PoseEstimator> estimator_;
 
     double scale_ = 1.0;
 };
