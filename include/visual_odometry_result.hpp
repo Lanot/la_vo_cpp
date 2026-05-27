@@ -5,7 +5,7 @@
 
 #include "frame.hpp"
 
-struct ProcessResult
+struct VisualOdometryResult
 {
     bool matched = false;
     bool estimated = false;

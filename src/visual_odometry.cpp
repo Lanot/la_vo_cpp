@@ -1,7 +1,7 @@
 #include <vector>
 
 #include "visual_odometry.hpp"
-#include "process_result.hpp"
+#include "visual_odometry_result.hpp"
 
 VisualOdometry::VisualOdometry(Config& config, FeatureTracker& tracker, PoseEstimator& estimator)
     : config_(config), tracker_(tracker), estimator_(estimator)
@@ -9,11 +9,11 @@ VisualOdometry::VisualOdometry(Config& config, FeatureTracker& tracker, PoseEsti
     global_pose_ = Sophus::SE3d();
 }
 
-ProcessResult VisualOdometry::process(
+VisualOdometryResult VisualOdometry::process(
     const cv::Mat& image,
     double timestamp)
 {
-    ProcessResult res;
+    VisualOdometryResult res;
 
     res.curr_frame = Frame::create();
     res.curr_frame->image = image.clone();

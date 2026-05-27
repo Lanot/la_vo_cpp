@@ -1,6 +1,6 @@
 #include "opencv_visualizer.hpp"
 #include "visual_odometry.hpp"
-#include "process_result.hpp"
+#include "visual_odometry_result.hpp"
 #include "utils.hpp"
 
 #include <vector>
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
         if (img.empty())
             continue;
 
-        ProcessResult res = vo.process(img, i * 0.1);
+        VisualOdometryResult res = vo.process(img, i * 0.1);
 
         if (!res.matched)
         {

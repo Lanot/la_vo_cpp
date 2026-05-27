@@ -4,14 +4,14 @@
 #include "feature_tracker.hpp"
 #include "frame.hpp"
 #include "pose_estimator.hpp"
-#include "process_result.hpp"
+#include "visual_odometry_result.hpp"
 
 class VisualOdometry
 {
 public:
     explicit VisualOdometry(Config& config, FeatureTracker& tracker, PoseEstimator& estimator);
 
-    ProcessResult process(const cv::Mat& image, double timestamp);
+    VisualOdometryResult process(const cv::Mat& image, double timestamp);
 
     Sophus::SE3d currentPose() const;
 
