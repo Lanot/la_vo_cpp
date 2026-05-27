@@ -3,7 +3,19 @@
 FeatureTracker::FeatureTracker(const TrackerConfig& config)
     : config_(config)
 {
-    orb_ = cv::ORB::create(config_.max_extract_features);
+    orb_ = cv::ORB::create(
+        config_.orb_max_extract_features,          // nfeatures
+        1.2f,          // scaleFactor
+        8,             // nlevels
+        31,            // edgeThreshold
+        0,             // firstLevel
+        2,             // WTA_K
+        cv::ORB::HARRIS_SCORE,
+        31,            // patchSize
+        20             // fastThreshold
+    );
+
+    matcher_ = cv::BFMatcher::create(cv::NORM_HAMMING, false);
 }
 
 bool FeatureTracker::extract(Frame::Ptr frame)
@@ -25,11 +37,9 @@ bool FeatureTracker::match(
     std::vector<cv::Point2f>& pts1,
     std::vector<cv::Point2f>& pts2)
 {
-    cv::BFMatcher matcher(cv::NORM_HAMMING);
-
     std::vector<cv::DMatch> matches;
 
-    matcher.match(
+    matcher_->match(
         prev->descriptors,
         curr->descriptors,
         matches
@@ -37,7 +47,7 @@ bool FeatureTracker::match(
 
     sortDMatches(matches);
 
-    matches.resize(config_.max_sorted_features);
+    matches.resize(config_.orb_max_sorted_features);
 
     for (auto& m : matches)
     {
@@ -55,5 +65,5 @@ bool FeatureTracker::match(
         }
     }
 
-    return good_matches.size() >= config_.min_valid_features;
+    return good_matches.size() >= config_.orb_min_valid_features;
 }

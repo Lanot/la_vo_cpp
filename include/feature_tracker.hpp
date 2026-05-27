@@ -23,5 +23,6 @@ public:
 protected:
     TrackerConfig config_;
 
+    cv::Ptr<cv::BFMatcher> matcher_;
     cv::Ptr<cv::ORB> orb_;
 };

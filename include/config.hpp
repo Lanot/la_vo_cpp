@@ -35,9 +35,9 @@ struct TrackerConfig
 {
     FeatureType feature_type = FeatureType::ORB;
 
-    int max_extract_features = 1000;
-    int max_sorted_features = 100;
-    int min_valid_features = 20;
+    int orb_max_extract_features = 1000;
+    int orb_max_sorted_features = 100;
+    int orb_min_valid_features = 20;
 
     double orb_max_distance = 20;
 };

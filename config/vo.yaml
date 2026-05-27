@@ -16,19 +16,20 @@ optimization:
   use_clahe: 1
 
 estimation:
-  min_pts: 10
-  min_inliers: 20
-  essential_prob: 0.9999
+  min_pts: 8
+  min_inliers: 16
+  essential_prob: 0.99
   essential_threshold: 1.0
 
 tracking:
   feature_type: orb
 
-  max_extract_features: 2000
-  max_sorted_features: 500
-  min_valid_features: 20
+  # ORB
+  orb_max_distance: 10  # ORB Hamming Distance: 20–40
+  orb_max_extract_features: 2000
+  orb_max_sorted_features: 100
+  orb_min_valid_features: 20
 
-  orb_max_distance: 10          # ORB Hamming Distance: 20–40
   sift_max_distance: 100        # ORB L2 Distance: 100–250
   surf_max_distance: 0.1        # ORB L2 Distance: 0.1–0.3
   super_point_max_distance: 0.2 # ORB L2/Cosine Distance: 0.2–0.6

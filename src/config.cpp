@@ -82,9 +82,9 @@ void Config::loadTracking()
 {
     const cv::FileNode tr = fs_["tracking"];
 
-    tr["max_extract_features"] >> tracker_.max_extract_features;
-    tr["max_sorted_features"] >> tracker_.max_sorted_features;
-    tr["min_valid_features"] >> tracker_.min_valid_features;
+    tr["orb_max_extract_features"] >> tracker_.orb_max_extract_features;
+    tr["orb_max_sorted_features"] >> tracker_.orb_max_sorted_features;
+    tr["orb_min_valid_features"] >> tracker_.orb_min_valid_features;
 
     std::string feature_type = (std::string)tr["feature_type"];
     if (feature_type == "sift")
