@@ -63,8 +63,7 @@ bool PoseEstimator::estimate(
         t.at<double>(2); // z=forward
 
     // apply scale BEFORE creating SE3
-    trans *= scale;
-    relative_pose = Sophus::SE3d(rot, trans);
+    relative_pose = Sophus::SE3d(rot, trans * scale);
 
     return true;
 }
