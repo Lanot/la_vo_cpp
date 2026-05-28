@@ -26,13 +26,13 @@ tracking:
 
   # ORB
   # orb_max_distance:   20 # ORB Hamming Distance: 20–40
-  orb_knn_distance_k: 0.75 # Smaller ratio = stricter ambiguity check
+  orb_knn_distance_k: 0.5 # Smaller ratio = stricter ambiguity check
   orb_max_extract_features: 2000
-  orb_max_sorted_features:  100
+  #orb_max_sorted_features:  100
   orb_min_valid_features:   20
 
   # sift_max_distance: 100  # SIFT L2 Distance: 100–250
-  sift_knn_distance_k: 0.75 # Smaller ratio = stricter ambiguity check
-  sift_max_extract_features: 1000
-  sift_max_sorted_features: 100
+  sift_knn_distance_k: 0.85 # Smaller ratio = stricter ambiguity check
+  sift_max_extract_features: 2000
+  #sift_max_sorted_features: 100
   sift_min_valid_features: 20
