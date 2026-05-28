@@ -48,17 +48,9 @@ VisualOdometryResult VisualOdometry::process(
         return res;
     }
 
-    std::vector<uchar> status;
     Sophus::SE3d relative_pose;
 
-    res.estimated = estimator_->estimate(
-        res.pts1,
-        res.pts2,
-        config_->K(),
-        relative_pose,
-        status
-    );
-
+    res.estimated = estimator_->estimate(res.pts1, res.pts2, config_->K(),relative_pose);
     if (!res.estimated)
     {
         prev_frame_ = res.curr_frame;

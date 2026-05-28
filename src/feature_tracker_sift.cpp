@@ -11,7 +11,7 @@ FeatureTrackerSIFT::FeatureTrackerSIFT(const TrackerConfig& config)
         1.6); // sigma
     
 
-    matcher_ = cv::BFMatcher::create(cv::NORM_HAMMING, false);
+    matcher_ = cv::BFMatcher::create(cv::NORM_L2, false);
 }
 
 bool FeatureTrackerSIFT::extract(Frame::Ptr frame)

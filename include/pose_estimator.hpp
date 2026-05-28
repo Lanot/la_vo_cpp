@@ -16,7 +16,6 @@ public:
         const std::vector<cv::Point2f>& pts1,
         const std::vector<cv::Point2f>& pts2,
         const cv::Mat& K,
-        Sophus::SE3d& relative_pose,
-        std::vector<uchar>& status
+        Sophus::SE3d& relative_pose
     );
 };

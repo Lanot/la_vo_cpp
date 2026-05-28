@@ -2,15 +2,14 @@
 
 PoseEstimator::PoseEstimator(const PoseEstimatorConfig& config)
     : config_(config)
-{
-}
+{}
 
 bool PoseEstimator::estimate(
     const std::vector<cv::Point2f>& pts1,
     const std::vector<cv::Point2f>& pts2,
     const cv::Mat& K,
-    Sophus::SE3d& relative_pose,
-    std::vector<uchar>& status)
+    Sophus::SE3d& relative_pose
+)
 {
     if (pts1.size() < config_.min_pts)
         return false;
@@ -62,8 +61,6 @@ bool PoseEstimator::estimate(
         t.at<double>(2);
 
     relative_pose = Sophus::SE3d(rot, trans);
-
-    status.assign(mask.begin<uchar>(), mask.end<uchar>());
 
     return true;
 }
