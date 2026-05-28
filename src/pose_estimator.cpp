@@ -31,7 +31,7 @@ bool PoseEstimator::estimate(
         return false;
 
     cv::Mat R, t;
-
+    // t: x=right, y=down, z=forward
     int inliers = cv::recoverPose(
         E,
         pts1,
@@ -56,10 +56,11 @@ bool PoseEstimator::estimate(
         }
     }
 
+    // KITTI uses same convention
     trans <<
-        t.at<double>(0),
-        t.at<double>(1),
-        t.at<double>(2);
+        t.at<double>(0), // x=right
+        t.at<double>(1), // y=down
+        t.at<double>(2); // z=forward
 
     // apply scale BEFORE creating SE3
     trans *= scale;

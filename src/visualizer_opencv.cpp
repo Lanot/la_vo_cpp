@@ -3,10 +3,10 @@
 
 VisualizerOpenCv::VisualizerOpenCv()
 {
-    trajectory_ =
+    traj_ =
         cv::Mat::zeros(
-            trajectory_rows_px_,
-            trajectory_cols_px_,
+            traj_rows_px_,
+            traj_cols_px_,
             CV_8UC3
         );
 }
@@ -56,29 +56,29 @@ void VisualizerOpenCv::drawPose(
 
     //std::cout << "POSE: X: " << t.x() << "  Y: " << t.y() << "  Z: " << t.z() << std::endl;
 
-    int x = static_cast<int>(t.x() * 1.5) + static_cast<int>(trajectory_cols_px_ / 2);
-    int y = static_cast<int>(t.z() * 1.5) + static_cast<int>(trajectory_rows_px_ / 2); // Usually do NOT use: t.y()
+    int dpt_x = static_cast<int>(t.x() * traj_scale_) + static_cast<int>(traj_cols_px_ / 2);
+    int dpt_y = static_cast<int>(t.z() * traj_scale_) + static_cast<int>(traj_rows_px_ / 2); // Usually do NOT use: t.y()
 
 
-    cv::Point current_point(x, y);
+    cv::Point current_point(dpt_x, dpt_y);
 
-    if (!starting_point_)
+    if (!is_first_point_)
     {
         cv::line(
-            trajectory_,
-            previous_point_,
+            traj_,
+            prev_point_,
             current_point,
             pose_color_,
             2
         );
     }
 
-    previous_point_ = current_point;
-    starting_point_ = false;
+    prev_point_ = current_point;
+    is_first_point_ = false;
 
     cv::imshow(
         "Trajectory",
-        trajectory_
+        traj_
     );
 
     cv::waitKey(1);

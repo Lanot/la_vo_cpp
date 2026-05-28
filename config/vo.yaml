@@ -22,7 +22,7 @@ estimation:
   essential_threshold: 1.0
 
 tracking:
-  feature_type: orb
+  feature_type: sift
 
   # ORB
   # orb_max_distance:   20 # ORB Hamming Distance: 20–40

@@ -53,8 +53,12 @@ VisualOdometryResult VisualOdometry::process(const Frame::Ptr& frame, double sca
         return res;
     }
 
-    // global_pose_ += scale * global_R * t;
-    global_pose_ = global_pose_ * relative_pose;
+    // global_pose : goes opposite side in compare to GT
+    //global_pose_ = global_pose_ * relative_pose;
+
+    // fix for mono vo
+    global_pose_ = global_pose_ * relative_pose.inverse();
+
     res.curr_frame->pose = global_pose_;
 
     prev_frame_ = res.curr_frame;
