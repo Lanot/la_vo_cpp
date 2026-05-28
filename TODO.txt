@@ -3,7 +3,8 @@ LIST of TODO:
 1. Implement Minimal VO with static settings -> Done
 2. Parametrize Settings via config/params.yaml -> Done
 
-3. Add SIFT/SURF/SuperPoint|Superglue/etc matching methods-> Pending
+3. Add SIFT/SURF/BRISK/SuperPoint|Superglue/etc matching methods-> Pending
+
 4. Add Triangulation-> Pending
 5. Add Optical Flow - optional-> Pending
 6. Add Stereo, RGB-D, Multi Mono inputs -> Pending
