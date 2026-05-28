@@ -15,7 +15,7 @@ public:
         std::unique_ptr<PoseEstimator> estimator
     );
 
-    VisualOdometryResult process(const cv::Mat& image, double timestamp);
+    VisualOdometryResult process(const Frame::Ptr& frame, double scale = 1.0);
 
     Sophus::SE3d currentPose() const;
 

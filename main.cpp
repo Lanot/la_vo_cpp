@@ -46,7 +46,12 @@ int main(int argc, char** argv)
         if (img.empty())
             continue;
 
-        VisualOdometryResult res = vo.process(img, i * 0.1);
+        Frame::Ptr curr_frame= Frame::create();
+        curr_frame = Frame::create();
+        curr_frame->image = img.clone();
+        curr_frame->timestamp = i * 0.1;
+
+        VisualOdometryResult res = vo.process(curr_frame);
 
         if (!res.matched)
         {
@@ -65,15 +70,22 @@ int main(int argc, char** argv)
             vo_visualizer->drawMatches(res.prev_frame, res.curr_frame, res.matches);
 
             Eigen::Vector3d vo_t = res.curr_frame->pose.translation();
-            std::cout << "VO POSE: X: " << vo_t.x() << "  Y: " << vo_t.y() << std::endl;
+            std::cout << "VO POSE: X: " << vo_t.x() << "  Y: " << vo_t.z() << std::endl;
 
             // Draw Kitti Ground Truth Pose
             Sophus::SE3d tg_pose = kittiLinePoseToSophusPose(gt_poses[i]);
             gt_visualizer->drawPose(tg_pose);
 
             Eigen::Vector3d gt_t = tg_pose.translation();
-            std::cout << "GT POSE: X: " << gt_t.x() << "  Y: " << gt_t.y() << std::endl;
+            std::cout << "GT POSE: X: " << gt_t.x() << "  Y: " << gt_t.z() << std::endl;
         }
+    }
+
+    while(true)
+    {
+        int key = cv::waitKey(30);
+        if(key == 27) // ESC
+            break;
     }
 
     return 0;

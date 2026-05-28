@@ -8,7 +8,8 @@ bool PoseEstimator::estimate(
     const std::vector<cv::Point2f>& pts1,
     const std::vector<cv::Point2f>& pts2,
     const cv::Mat& K,
-    Sophus::SE3d& relative_pose
+    Sophus::SE3d& relative_pose,
+    double scale
 )
 {
     if (pts1.size() < config_.min_pts)
@@ -60,6 +61,8 @@ bool PoseEstimator::estimate(
         t.at<double>(1),
         t.at<double>(2);
 
+    // apply scale BEFORE creating SE3
+    trans *= scale;
     relative_pose = Sophus::SE3d(rot, trans);
 
     return true;

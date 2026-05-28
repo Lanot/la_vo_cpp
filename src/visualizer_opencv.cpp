@@ -43,16 +43,22 @@ void VisualizerOpenCv::drawMatches(
     cv::waitKey(1);
 }
 
+// Typical KITTI visualization
+//     z (forward)
+//     ^
+//     |
+//     ------> x (right)
 void VisualizerOpenCv::drawPose(
     const Sophus::SE3d& pose)
 {
     Eigen::Vector3d t =
         pose.translation();
 
-    //std::cout << "POSE: X: " << t.x() << "  Y: " << t.y() << std::endl;
+    //std::cout << "POSE: X: " << t.x() << "  Y: " << t.y() << "  Z: " << t.z() << std::endl;
 
     int x = static_cast<int>(t.x() * 1.5) + static_cast<int>(trajectory_cols_px_ / 2);
-    int y = static_cast<int>(t.y() * 1.5) + static_cast<int>(trajectory_rows_px_ / 2);
+    int y = static_cast<int>(t.z() * 1.5) + static_cast<int>(trajectory_rows_px_ / 2); // Usually do NOT use: t.y()
+
 
     cv::Point current_point(x, y);
 

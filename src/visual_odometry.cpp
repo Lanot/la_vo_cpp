@@ -14,15 +14,11 @@ VisualOdometry::VisualOdometry(
     global_pose_ = Sophus::SE3d();
 }
 
-VisualOdometryResult VisualOdometry::process(
-    const cv::Mat& image,
-    double timestamp)
+VisualOdometryResult VisualOdometry::process(const Frame::Ptr& frame, double scale)
 {
     VisualOdometryResult res;
 
-    res.curr_frame = Frame::create();
-    res.curr_frame->image = image.clone();
-    res.curr_frame->timestamp = timestamp;
+    res.curr_frame = frame;
 
     tracker_->extract(res.curr_frame);
 
@@ -50,13 +46,14 @@ VisualOdometryResult VisualOdometry::process(
 
     Sophus::SE3d relative_pose;
 
-    res.estimated = estimator_->estimate(res.pts1, res.pts2, config_->K(),relative_pose);
+    res.estimated = estimator_->estimate(res.pts1, res.pts2, config_->K(),relative_pose, scale);
     if (!res.estimated)
     {
         prev_frame_ = res.curr_frame;
         return res;
     }
 
+    // global_pose_ += scale * global_R * t;
     global_pose_ = global_pose_ * relative_pose;
     res.curr_frame->pose = global_pose_;
 
