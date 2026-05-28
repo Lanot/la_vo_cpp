@@ -19,7 +19,8 @@ void VisualizerOpenCv::setPoseColor(const cv::Scalar& pose_color)
 void VisualizerOpenCv::drawMatches(
     Frame::Ptr prev,
     Frame::Ptr curr,
-    const std::vector<cv::DMatch>& matches)
+    const std::vector<cv::DMatch>& matches
+)
 {
     if (matches.empty())
         return;
@@ -48,8 +49,7 @@ void VisualizerOpenCv::drawMatches(
 //     ^
 //     |
 //     ------> x (right)
-void VisualizerOpenCv::drawPose(
-    const Sophus::SE3d& pose)
+void VisualizerOpenCv::drawPose(const Sophus::SE3d& pose)
 {
     Eigen::Vector3d t =
         pose.translation();

@@ -34,6 +34,10 @@ int main(int argc, char** argv)
     std::vector<std::string> images = loadImagesFromPath(argv[2]);
     std::vector<std::string> gt_poses = loadPosesFromPath(argv[3]);
 
+    double curr_gt_scale = 1.0;
+    Sophus::SE3d curr_gt_pose;
+    Sophus::SE3d prev_gt_pose;
+
     for (size_t i = 0; i < images.size(); ++i)
     {
         cv::Mat img = cv::imread(images[i], cv::IMREAD_GRAYSCALE);
@@ -46,12 +50,26 @@ int main(int argc, char** argv)
         if (img.empty())
             continue;
 
+        // ------------------------------------------------------------------------------- //
+        // scale vector calculation for mono camera using kitti GT poses
+        curr_gt_pose = kittiLinePoseToSophusPose(gt_poses[i]);
+        // norm() = vector length = Euclidean distance between positions
+        curr_gt_scale = (curr_gt_pose.translation() - prev_gt_pose.translation()).norm();
+        prev_gt_pose = curr_gt_pose;
+
+        // fix for noisy scale
+        if (curr_gt_scale < 0.1)
+        {
+            curr_gt_scale = 1.0;
+        }
+        // ------------------------------------------------------------------------------- //
+
         Frame::Ptr curr_frame= Frame::create();
         curr_frame = Frame::create();
         curr_frame->image = img.clone();
         curr_frame->timestamp = i * 0.1;
 
-        VisualOdometryResult res = vo.process(curr_frame);
+        VisualOdometryResult res = vo.process(curr_frame, curr_gt_scale);
 
         if (!res.matched)
         {
@@ -73,10 +91,9 @@ int main(int argc, char** argv)
             std::cout << "VO POSE: X: " << vo_t.x() << "  Y: " << vo_t.z() << std::endl;
 
             // Draw Kitti Ground Truth Pose
-            Sophus::SE3d tg_pose = kittiLinePoseToSophusPose(gt_poses[i]);
-            gt_visualizer->drawPose(tg_pose);
+            gt_visualizer->drawPose(curr_gt_pose);
 
-            Eigen::Vector3d gt_t = tg_pose.translation();
+            Eigen::Vector3d gt_t = curr_gt_pose.translation();
             std::cout << "GT POSE: X: " << gt_t.x() << "  Y: " << gt_t.z() << std::endl;
         }
     }
