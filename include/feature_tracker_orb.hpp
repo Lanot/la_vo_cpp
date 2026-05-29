@@ -15,7 +15,6 @@ public:
     bool match(
         Frame::Ptr prev,
         Frame::Ptr curr,
-        std::vector<cv::DMatch>& good_matches,
         std::vector<cv::Point2f>& pts1,
         std::vector<cv::Point2f>& pts2
     );
@@ -23,6 +22,8 @@ public:
 protected:
     TrackerConfig config_;
     cv::Ptr<cv::ORB> orb_;
+
+    cv::Ptr<cv::TermCriteria> ofCriteria_;
     cv::Ptr<cv::BFMatcher> bfMatcher_;
     cv::Ptr<cv::FlannBasedMatcher> flannMatcher_;
 };

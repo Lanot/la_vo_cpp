@@ -15,7 +15,6 @@ public:
     bool match(
         Frame::Ptr prev,
         Frame::Ptr curr,
-        std::vector<cv::DMatch>& good_matches,
         std::vector<cv::Point2f>& pts1,
         std::vector<cv::Point2f>& pts2
     );

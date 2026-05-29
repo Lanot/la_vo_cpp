@@ -19,12 +19,19 @@ Sophus::SE3d kittiLinePoseToSophusPose(std::string line);
 
 void sortMatches(std::vector<cv::DMatch>& matches);
 
+void estimateOpticalFlowPyrLKMatchesAndFillResults(
+    cv::TermCriteria& termCriteria,
+    const Frame::Ptr& prev,
+    const Frame::Ptr& curr,
+    std::vector<cv::Point2f>& pts1,
+    std::vector<cv::Point2f>& pts2
+);
+
 void filterMatchesAndFillResults(
     double max_dist,
     const Frame::Ptr& prev,
     const Frame::Ptr& curr,
     std::vector<cv::DMatch>& matches,
-    std::vector<cv::DMatch>& good_matches,
     std::vector<cv::Point2f>& pts1,
     std::vector<cv::Point2f>& pts2
 );
@@ -34,7 +41,6 @@ void filterKnnMatchesAndFillResults(
     const Frame::Ptr& prev,
     const Frame::Ptr& curr,
     std::vector<std::vector<cv::DMatch>>& knnMatches,
-    std::vector<cv::DMatch>& good_matches,
     std::vector<cv::Point2f>& pts1,
     std::vector<cv::Point2f>& pts2
 );

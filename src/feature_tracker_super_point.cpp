@@ -36,7 +36,6 @@ bool FeatureTrackerSuperPoint::extract(Frame::Ptr prev, Frame::Ptr curr)
 bool FeatureTrackerSuperPoint::match(
     Frame::Ptr prev,
     Frame::Ptr curr,
-    std::vector<cv::DMatch>& good_matches,
     std::vector<cv::Point2f>& pts1,
     std::vector<cv::Point2f>& pts2
 )
@@ -76,5 +75,5 @@ bool FeatureTrackerSuperPoint::match(
     //     filterMatchesAndFillResults(config_.super_point_max_dist_simple, prev, curr, matches, good_matches, pts1, pts2);
     // }
     //
-    // return good_matches.size() >= config_.super_point_min_valid_features;
+    // return pts2.size() >= config_.super_point_min_valid_features;
 }

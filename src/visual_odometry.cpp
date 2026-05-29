@@ -32,7 +32,6 @@ VisualOdometryResult VisualOdometry::process(const Frame::Ptr& frame, double sca
     res.matched = tracker_->match(
         prev_frame_,
         res.curr_frame,
-        res.matches,
         res.pts1,
         res.pts2
     );

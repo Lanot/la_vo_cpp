@@ -16,7 +16,14 @@ FeatureTrackerORB::FeatureTrackerORB(const TrackerConfig& config)
     );
 
     auto cfm = config_.orb_feature_matcher;
-    if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::BF_KNN)
+    if (cfm == FeatureMatcher::LKOF)
+    {
+        // Real-time embedded
+        ofCriteria_ = cv::makePtr<cv::TermCriteria>(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 20, 0.03);
+        // High-precision tracking
+        //ofCriteria_ = cv::makePtr<cv::TermCriteria>(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 50, 0.001);
+    }
+    else if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::BF_KNN)
     {
         bfMatcher_ = cv::BFMatcher::create(cv::NORM_HAMMING, false);
     }
@@ -43,7 +50,6 @@ bool FeatureTrackerORB::extract(Frame::Ptr prev, Frame::Ptr curr)
 bool FeatureTrackerORB::match(
     Frame::Ptr prev,
     Frame::Ptr curr,
-    std::vector<cv::DMatch>& good_matches,
     std::vector<cv::Point2f>& pts1,
     std::vector<cv::Point2f>& pts2
 )
@@ -51,23 +57,7 @@ bool FeatureTrackerORB::match(
     auto cfm = config_.orb_feature_matcher;
     if (cfm == FeatureMatcher::LKOF)
     {
-        // std::vector<cv::Point2f>
-        //     pts_curr;
-        //
-        // std::vector<uchar>
-        //     status;
-        //
-        // std::vector<float>
-        //     error;
-        //
-        // cv::calcOpticalFlowPyrLK(
-        //     prev->image,
-        //     curr->image,
-        //     pts_prev,
-        //     pts_curr,
-        //     status,
-        //     error
-        // );
+        estimateOpticalFlowPyrLKMatchesAndFillResults(*ofCriteria_, prev, curr, pts1, pts2);
     }
     else if (cfm == FeatureMatcher::BF_KNN || cfm == FeatureMatcher::FLANN_KNN)
     {
@@ -82,7 +72,7 @@ bool FeatureTrackerORB::match(
             flannMatcher_->knnMatch(prev->descriptors, curr->descriptors, knnMatches, 2);
         }
 
-        filterKnnMatchesAndFillResults(config_.orb_knn_dist_k, prev, curr, knnMatches, good_matches, pts1, pts2);
+        filterKnnMatchesAndFillResults(config_.orb_knn_dist_k, prev, curr, knnMatches, pts1, pts2);
     }
     else if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::FLANN)
     {
@@ -100,8 +90,8 @@ bool FeatureTrackerORB::match(
         sortMatches(matches);
         matches.resize(config_.orb_max_sorted_simple_features);
 
-        filterMatchesAndFillResults(config_.orb_max_dist_simple, prev, curr, matches, good_matches, pts1, pts2);
+        filterMatchesAndFillResults(config_.orb_max_dist_simple, prev, curr, matches, pts1, pts2);
     }
 
-    return good_matches.size() >= config_.orb_min_valid_features;
+    return pts2.size() >= config_.orb_min_valid_features;
 }

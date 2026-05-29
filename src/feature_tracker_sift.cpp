@@ -36,7 +36,6 @@ bool FeatureTrackerSIFT::extract(Frame::Ptr prev, Frame::Ptr curr)
 bool FeatureTrackerSIFT::match(
     Frame::Ptr prev,
     Frame::Ptr curr,
-    std::vector<cv::DMatch>& good_matches,
     std::vector<cv::Point2f>& pts1,
     std::vector<cv::Point2f>& pts2
 )
@@ -56,7 +55,7 @@ bool FeatureTrackerSIFT::match(
             flannMatcher_->knnMatch(prev->descriptors, curr->descriptors, knnMatches, 2);
         }
 
-        filterKnnMatchesAndFillResults(config_.sift_knn_dist_k, prev, curr, knnMatches, good_matches, pts1, pts2);
+        filterKnnMatchesAndFillResults(config_.sift_knn_dist_k, prev, curr, knnMatches, pts1, pts2);
     }
     else if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::FLANN)
     {
@@ -74,8 +73,8 @@ bool FeatureTrackerSIFT::match(
         sortMatches(matches);
         matches.resize(config_.sift_max_sorted_simple_features);
 
-        filterMatchesAndFillResults(config_.sift_max_dist_simple, prev, curr, matches, good_matches, pts1, pts2);
+        filterMatchesAndFillResults(config_.sift_max_dist_simple, prev, curr, matches, pts1, pts2);
     }
 
-    return good_matches.size() >= config_.sift_min_valid_features;
+    return pts2.size() >= config_.orb_min_valid_features;
 }

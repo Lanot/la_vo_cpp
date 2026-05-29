@@ -102,6 +102,46 @@ void sortMatches(std::vector<cv::DMatch>& matches)
     );
 }
 
+void estimateOpticalFlowPyrLKMatchesAndFillResults(
+    cv::TermCriteria& termCriteria,
+    const Frame::Ptr& prev,
+    const Frame::Ptr& curr,
+    std::vector<cv::Point2f>& pts1,
+    std::vector<cv::Point2f>& pts2
+)
+{
+    std::vector<uchar> status;
+    std::vector<float> error;
+
+    std::vector<cv::Point2f> prev_points2f;
+    std::vector<cv::Point2f> curr_points2f;
+
+    // Optical Flow Support
+    cv::KeyPoint::convert(prev->keypoints, prev_points2f);
+    cv::KeyPoint::convert(curr->keypoints, curr_points2f);
+
+    cv::calcOpticalFlowPyrLK(
+    prev->image,
+        curr->image,
+        prev_points2f,
+        curr_points2f,
+        status,
+        error,
+        cv::Size(21, 21),
+        3,
+        termCriteria
+    );
+
+    for (size_t i = 0; i < status.size(); ++i)
+    {
+        if (status[i])
+        {
+            pts1.push_back(prev_points2f[i]);
+            pts2.push_back(curr_points2f[i]);
+        }
+    }
+}
+
 //queryIdx	index in FIRST descriptor set
 //trainIdx	index in SECOND descriptor set
 void filterMatchesAndFillResults(
@@ -109,7 +149,6 @@ void filterMatchesAndFillResults(
     const Frame::Ptr& prev,
     const Frame::Ptr& curr,
     std::vector<cv::DMatch>& matches,
-    std::vector<cv::DMatch>& good_matches,
     std::vector<cv::Point2f>& pts1,
     std::vector<cv::Point2f>& pts2
 )
@@ -119,7 +158,6 @@ void filterMatchesAndFillResults(
     {
         if (m.distance <= max_dist)
         {
-            good_matches.push_back(m);
             pts1.push_back(prev->keypoints[m.queryIdx].pt);
             pts2.push_back(curr->keypoints[m.trainIdx].pt);
         }
@@ -131,7 +169,6 @@ void filterKnnMatchesAndFillResults(
     const Frame::Ptr& prev,
     const Frame::Ptr& curr,
     std::vector<std::vector<cv::DMatch>>& knnMatches,
-    std::vector<cv::DMatch>& good_matches,
     std::vector<cv::Point2f>& pts1,
     std::vector<cv::Point2f>& pts2
 )
@@ -143,7 +180,6 @@ void filterKnnMatchesAndFillResults(
 
         if (m[0].distance < knn_dist_k * m[1].distance) // && (m[0].distance < config_.orb_max_dist))
         {
-            good_matches.push_back(m[0]);
             pts1.push_back(prev->keypoints[m[0].queryIdx].pt);
             pts2.push_back(curr->keypoints[m[0].trainIdx].pt);
         }

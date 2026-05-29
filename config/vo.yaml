@@ -23,12 +23,12 @@ estimation:
 
 tracking:
   # sift|orb - orb is default | sift + flann_knn is a very good combo, but slow
-  feature_type: sift
+  feature_type: orb
 
   # -------------------------------------------------------------- #
   # ORB
   # bf|bf_knn|flann|flann_knn|lkof - bf is default, lkof - LK Optical Flow
-  orb_feature_matcher: flann_knn
+  orb_feature_matcher: bf
   orb_max_extract_features: 2000
   orb_max_sorted_simple_features: 500
   orb_min_valid_features: 20
