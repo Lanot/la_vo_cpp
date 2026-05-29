@@ -4,11 +4,11 @@ FeatureTrackerSIFT::FeatureTrackerSIFT(const TrackerConfig& config)
     : config_(config)
 {
     sift_ = cv::SIFT::create(
-        config_.sift_max_extract_features,  // nfeatures
-        3,     // nOctaveLayers
-        0.04,  // contrastThreshold
-        10,    // edgeThreshold
-        1.6    // sigma
+        config_.sift_max_extract_features, // nfeatures
+        3, // nOctaveLayers
+        0.04, // contrastThreshold
+        10, // edgeThreshold
+        1.6 // sigma
     );
 
     auto cfm = config_.sift_feature_matcher;
@@ -67,7 +67,8 @@ bool FeatureTrackerSIFT::match(
             flannMatcher_->knnMatch(prev->descriptors, curr->descriptors, knnMatches, 2);
         }
 
-        filterKnnMatchesAndFillResults(config_.sift_knn_dist_k, prev, curr, knnMatches, resMatches, resPrevPts, resCurrPts);
+        filterKnnMatchesAndFillResults(config_.sift_knn_dist_k, prev, curr, knnMatches, resMatches, resPrevPts,
+                                       resCurrPts);
     }
     else if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::FLANN)
     {
@@ -85,7 +86,8 @@ bool FeatureTrackerSIFT::match(
         sortMatches(matches);
         matches.resize(config_.sift_max_sorted_simple_features);
 
-        filterSimpleMatchesAndFillResults(config_.sift_max_dist_simple, prev, curr, matches, resMatches, resPrevPts, resCurrPts);
+        filterSimpleMatchesAndFillResults(config_.sift_max_dist_simple, prev, curr, matches, resMatches, resPrevPts,
+                                          resCurrPts);
     }
 
     return resCurrPts.size() >= config_.sift_min_valid_features;

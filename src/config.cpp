@@ -28,7 +28,7 @@ bool Config::validate() const
 
 cv::Mat Config::K() const
 {
-    return (cv::Mat_<double>(3,3) <<
+    return (cv::Mat_<double>(3, 3) <<
         cam_.fx, 0, cam_.cx,
         0, cam_.fy, cam_.cy,
         0, 0, 1);

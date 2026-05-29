@@ -2,7 +2,8 @@
 
 PoseEstimator::PoseEstimator(const PoseEstimatorConfig& config)
     : config_(config)
-{}
+{
+}
 
 bool PoseEstimator::estimate(
     const std::vector<cv::Point2f>& resPrevPts,

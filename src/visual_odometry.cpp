@@ -45,7 +45,7 @@ VisualOdometryResult VisualOdometry::process(const Frame::Ptr& frame, double sca
 
     Sophus::SE3d relative_pose;
 
-    res.estimated = estimator_->estimate(res.resPrevPts, res.resCurrPts, config_->K(),relative_pose, scale);
+    res.estimated = estimator_->estimate(res.resPrevPts, res.resCurrPts, config_->K(), relative_pose, scale);
     if (!res.estimated)
     {
         prev_frame_ = res.curr_frame;

@@ -17,7 +17,7 @@ protected:
     double traj_scale_ = 1.0;
 
     cv::Scalar pose_est_color_ = cv::Scalar(255, 0, 0); // Blue
-    cv::Scalar pose_gt_color_ = cv::Scalar(0, 0, 255);  // Red
+    cv::Scalar pose_gt_color_ = cv::Scalar(0, 0, 255); // Red
 
 public:
     VisualizerOpenCv();

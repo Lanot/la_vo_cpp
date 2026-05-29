@@ -73,9 +73,9 @@ Sophus::SE3d kittiLinePoseToSophusPose(std::string line)
         Eigen::Vector3d::Zero();
 
     if (!(ss
-        >> R(0,0) >> R(0,1) >> R(0,2) >> t(0)
-        >> R(1,0) >> R(1,1) >> R(1,2) >> t(1)
-        >> R(2,0) >> R(2,1) >> R(2,2) >> t(2)))
+        >> R(0, 0) >> R(0, 1) >> R(0, 2) >> t(0)
+        >> R(1, 0) >> R(1, 1) >> R(1, 2) >> t(1)
+        >> R(2, 0) >> R(2, 1) >> R(2, 2) >> t(2)))
     {
         throw std::runtime_error(
             "Invalid KITTI pose line"
@@ -121,7 +121,7 @@ void estimateOpticalFlowPyrLKMatchesAndFillResults(
     cv::KeyPoint::convert(curr->keypoints, curr_points2f);
 
     cv::calcOpticalFlowPyrLK(
-    prev->image,
+        prev->image,
         curr->image,
         prev_points2f,
         curr_points2f,

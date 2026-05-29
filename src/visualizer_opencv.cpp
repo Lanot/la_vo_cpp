@@ -50,17 +50,19 @@ void VisualizerOpenCv::drawPose(
     //std::cout << "POSE: X: " << t.x() << "  Y: " << t.y() << "  Z: " << t.z() << std::endl;
 
     const int est_x = static_cast<int>(t_est.x() * traj_scale_) + static_cast<int>(traj_cols_px_ / 2);
-    const int est_y = static_cast<int>(t_est.z() * traj_scale_) + static_cast<int>(traj_rows_px_ / 2); // Usually do NOT use: t.y()
+    const int est_y = static_cast<int>(t_est.z() * traj_scale_) + static_cast<int>(traj_rows_px_ / 2);
+    // Usually do NOT use: t.y()
 
     const int gt_x = static_cast<int>(t_gt.x() * traj_scale_) + static_cast<int>(traj_cols_px_ / 2);
-    const int gt_y = static_cast<int>(t_gt.z() * traj_scale_) + static_cast<int>(traj_rows_px_ / 2); // Usually do NOT use: t.y()
+    const int gt_y = static_cast<int>(t_gt.z() * traj_scale_) + static_cast<int>(traj_rows_px_ / 2);
+    // Usually do NOT use: t.y()
 
     const cv::Point current_est_point(est_x, est_y);
     const cv::Point current_gt_point(gt_x, gt_y);
 
     if (!is_first_point_)
     {
-        cv::line(traj_, prev_est_point_,current_est_point, pose_est_color_, 2);
+        cv::line(traj_, prev_est_point_, current_est_point, pose_est_color_, 2);
         cv::line(traj_, prev_gt_point_, current_gt_point, pose_gt_color_, 2);
     }
 

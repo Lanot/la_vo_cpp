@@ -31,13 +31,13 @@ FeatureTrackerORB::FeatureTrackerORB(const TrackerConfig& config)
     else if (cfm == FeatureMatcher::FLANN || cfm == FeatureMatcher::FLANN_KNN)
     {
         // ORB requires LSH index: ORB + FLANN-LSH, ORB Descriptor is CV_8U
-         flannMatcher_ = cv::makePtr<cv::FlannBasedMatcher>(
+        flannMatcher_ = cv::makePtr<cv::FlannBasedMatcher>(
             cv::makePtr<cv::flann::LshIndexParams>(
                 12, // table_number
                 20, // key_size
-                2   // multi_probe_level
+                2 // multi_probe_level
             )
-         );
+        );
     }
 }
 
@@ -74,7 +74,8 @@ bool FeatureTrackerORB::match(
             flannMatcher_->knnMatch(prev->descriptors, curr->descriptors, knnMatches, 2);
         }
 
-        filterKnnMatchesAndFillResults(config_.orb_knn_dist_k, prev, curr, knnMatches, resMatches, resPrevPts, resCurrPts);
+        filterKnnMatchesAndFillResults(config_.orb_knn_dist_k, prev, curr, knnMatches, resMatches, resPrevPts,
+                                       resCurrPts);
     }
     else if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::FLANN)
     {
@@ -92,7 +93,8 @@ bool FeatureTrackerORB::match(
         sortMatches(matches);
         matches.resize(config_.orb_max_sorted_simple_features);
 
-        filterSimpleMatchesAndFillResults(config_.orb_max_dist_simple, prev, curr, matches, resMatches, resPrevPts, resCurrPts);
+        filterSimpleMatchesAndFillResults(config_.orb_max_dist_simple, prev, curr, matches, resMatches, resPrevPts,
+                                          resCurrPts);
     }
 
     return resCurrPts.size() >= config_.orb_min_valid_features;
