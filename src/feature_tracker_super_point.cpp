@@ -26,11 +26,11 @@ FeatureTrackerSuperPoint::FeatureTrackerSuperPoint(const TrackerConfig& config)
     // }
 }
 
-bool FeatureTrackerSuperPoint::extract(Frame::Ptr frame)
+bool FeatureTrackerSuperPoint::extract(Frame::Ptr prev, Frame::Ptr curr)
 {
     // super_point_->detectAndCompute(frame->image, cv::noArray(), frame->keypoints, frame->descriptors);
 
-    return !frame->keypoints.empty();
+    return !curr->keypoints.empty();
 }
 
 bool FeatureTrackerSuperPoint::match(

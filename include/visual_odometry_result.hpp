@@ -10,8 +10,8 @@ struct VisualOdometryResult
     bool matched = false;
     bool estimated = false;
 
-    Frame::Ptr curr_frame;
-    Frame::Ptr prev_frame;
+    Frame::Ptr curr_frame = nullptr;
+    Frame::Ptr prev_frame = nullptr;
 
     std::vector<cv::DMatch> matches;
 

@@ -7,7 +7,7 @@ class IFeatureTracker
 public:
     virtual ~IFeatureTracker() = default;
 
-    virtual bool extract(Frame::Ptr frame) = 0;
+    virtual bool extract(Frame::Ptr prev, Frame::Ptr curr) = 0;
 
     virtual bool match(
         Frame::Ptr prev,

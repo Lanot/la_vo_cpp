@@ -16,7 +16,7 @@ FeatureTrackerSIFT::FeatureTrackerSIFT(const TrackerConfig& config)
     {
         bfMatcher_ = cv::BFMatcher::create(cv::NORM_L2, false);
     }
-    else
+    else if (cfm == FeatureMatcher::FLANN || cfm == FeatureMatcher::FLANN_KNN)
     {
         // FLANN parameters for SIFT, SIFT Descriptor is CV_32F
         flannMatcher_ = cv::makePtr<cv::FlannBasedMatcher>(
@@ -26,11 +26,11 @@ FeatureTrackerSIFT::FeatureTrackerSIFT(const TrackerConfig& config)
     }
 }
 
-bool FeatureTrackerSIFT::extract(Frame::Ptr frame)
+bool FeatureTrackerSIFT::extract(Frame::Ptr prev, Frame::Ptr curr)
 {
-    sift_->detectAndCompute(frame->image, cv::noArray(), frame->keypoints, frame->descriptors);
+    sift_->detectAndCompute(curr->image, cv::noArray(), curr->keypoints, curr->descriptors);
 
-    return !frame->keypoints.empty();
+    return !curr->keypoints.empty();
 }
 
 bool FeatureTrackerSIFT::match(
@@ -42,6 +42,7 @@ bool FeatureTrackerSIFT::match(
 )
 {
     auto cfm = config_.sift_feature_matcher;
+
     if (cfm == FeatureMatcher::BF_KNN || cfm == FeatureMatcher::FLANN_KNN)
     {
         std::vector<std::vector<cv::DMatch>> knnMatches;
@@ -57,7 +58,7 @@ bool FeatureTrackerSIFT::match(
 
         filterKnnMatchesAndFillResults(config_.sift_knn_dist_k, prev, curr, knnMatches, good_matches, pts1, pts2);
     }
-    else
+    else if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::FLANN)
     {
         std::vector<cv::DMatch> matches;
 

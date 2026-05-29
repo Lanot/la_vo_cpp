@@ -20,7 +20,7 @@ FeatureTrackerORB::FeatureTrackerORB(const TrackerConfig& config)
     {
         bfMatcher_ = cv::BFMatcher::create(cv::NORM_HAMMING, false);
     }
-    else
+    else if (cfm == FeatureMatcher::FLANN || cfm == FeatureMatcher::FLANN_KNN)
     {
         // ORB requires LSH index: ORB + FLANN-LSH, ORB Descriptor is CV_8U
          flannMatcher_ = cv::makePtr<cv::FlannBasedMatcher>(
@@ -33,11 +33,11 @@ FeatureTrackerORB::FeatureTrackerORB(const TrackerConfig& config)
     }
 }
 
-bool FeatureTrackerORB::extract(Frame::Ptr frame)
+bool FeatureTrackerORB::extract(Frame::Ptr prev, Frame::Ptr curr)
 {
-    orb_->detectAndCompute(frame->image, cv::noArray(), frame->keypoints, frame->descriptors);
+    orb_->detectAndCompute(curr->image, cv::noArray(), curr->keypoints, curr->descriptors);
 
-    return !frame->keypoints.empty();
+    return !curr->keypoints.empty();
 }
 
 bool FeatureTrackerORB::match(
@@ -49,7 +49,27 @@ bool FeatureTrackerORB::match(
 )
 {
     auto cfm = config_.orb_feature_matcher;
-    if (cfm == FeatureMatcher::BF_KNN || cfm == FeatureMatcher::FLANN_KNN)
+    if (cfm == FeatureMatcher::LKOF)
+    {
+        // std::vector<cv::Point2f>
+        //     pts_curr;
+        //
+        // std::vector<uchar>
+        //     status;
+        //
+        // std::vector<float>
+        //     error;
+        //
+        // cv::calcOpticalFlowPyrLK(
+        //     prev->image,
+        //     curr->image,
+        //     pts_prev,
+        //     pts_curr,
+        //     status,
+        //     error
+        // );
+    }
+    else if (cfm == FeatureMatcher::BF_KNN || cfm == FeatureMatcher::FLANN_KNN)
     {
         std::vector<std::vector<cv::DMatch>> knnMatches;
 
@@ -64,7 +84,7 @@ bool FeatureTrackerORB::match(
 
         filterKnnMatchesAndFillResults(config_.orb_knn_dist_k, prev, curr, knnMatches, good_matches, pts1, pts2);
     }
-    else
+    else if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::FLANN)
     {
         std::vector<cv::DMatch> matches;
 

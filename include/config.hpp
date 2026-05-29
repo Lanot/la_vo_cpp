@@ -8,6 +8,7 @@ enum FeatureMatcher
     BF_KNN,
     FLANN,
     FLANN_KNN,
+    LKOF, //LK Optical Flow
 };
 
 enum FeatureType

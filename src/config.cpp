@@ -116,7 +116,11 @@ FeatureType Config::mapFeatureType(const std::string& feature_type)
 
 FeatureMatcher Config::mapFeatureMatcher(const std::string& feature_matcher)
 {
-    if (feature_matcher == "flann")
+    if (feature_matcher == "lkof")
+    {
+        return FeatureMatcher::LKOF;
+    }
+    else if (feature_matcher == "flann")
     {
         return FeatureMatcher::FLANN;
     }

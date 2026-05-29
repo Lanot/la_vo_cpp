@@ -10,7 +10,7 @@ class FeatureTrackerORB : public IFeatureTracker
 public:
     FeatureTrackerORB(const TrackerConfig& config);
 
-    bool extract(Frame::Ptr frame);
+    bool extract(Frame::Ptr prev, Frame::Ptr curr);
 
     bool match(
         Frame::Ptr prev,

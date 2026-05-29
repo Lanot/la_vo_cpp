@@ -19,10 +19,9 @@ VisualOdometryResult VisualOdometry::process(const Frame::Ptr& frame, double sca
     VisualOdometryResult res;
 
     res.curr_frame = frame;
-
-    tracker_->extract(res.curr_frame);
-
     res.prev_frame = prev_frame_;
+
+    tracker_->extract(res.prev_frame, res.curr_frame);
 
     if (!prev_frame_)
     {

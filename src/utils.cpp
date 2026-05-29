@@ -102,6 +102,8 @@ void sortMatches(std::vector<cv::DMatch>& matches)
     );
 }
 
+//queryIdx	index in FIRST descriptor set
+//trainIdx	index in SECOND descriptor set
 void filterMatchesAndFillResults(
     double max_dist,
     const Frame::Ptr& prev,
