@@ -16,7 +16,6 @@ public:
 
     std::vector<cv::KeyPoint> keypoints; // extracted
     cv::Mat descriptors; // extracted
-    std::vector<cv::Point2f> pts; // matched points
 
     Sophus::SE3d pose = Sophus::SE3d();
 

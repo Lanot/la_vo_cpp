@@ -15,8 +15,9 @@ public:
     bool match(
         Frame::Ptr prev,
         Frame::Ptr curr,
-        std::vector<cv::Point2f>& pts1,
-        std::vector<cv::Point2f>& pts2
+        std::vector<cv::DMatch>& resMatches,
+        std::vector<cv::Point2f>& resPrevPts,
+        std::vector<cv::Point2f>& resCurrPts
     );
 
 protected:

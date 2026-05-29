@@ -32,8 +32,9 @@ VisualOdometryResult VisualOdometry::process(const Frame::Ptr& frame, double sca
     res.matched = tracker_->match(
         prev_frame_,
         res.curr_frame,
-        res.pts1,
-        res.pts2
+        res.matches,
+        res.resPrevPts,
+        res.resCurrPts
     );
 
     if (!res.matched)
@@ -44,7 +45,7 @@ VisualOdometryResult VisualOdometry::process(const Frame::Ptr& frame, double sca
 
     Sophus::SE3d relative_pose;
 
-    res.estimated = estimator_->estimate(res.pts1, res.pts2, config_->K(),relative_pose, scale);
+    res.estimated = estimator_->estimate(res.resPrevPts, res.resCurrPts, config_->K(),relative_pose, scale);
     if (!res.estimated)
     {
         prev_frame_ = res.curr_frame;

@@ -23,7 +23,7 @@ estimation:
 
 tracking:
   # sift|orb - orb is default | sift + flann_knn, sift + lkof, orb + lkof are a very good combos. sift + flan_knn is a bit slow
-  feature_type: orb
+  feature_type: sift
 
   # -------------------------------------------------------------- #
   # ORB

@@ -13,8 +13,8 @@ public:
     explicit PoseEstimator(const PoseEstimatorConfig& config);
 
     bool estimate(
-        const std::vector<cv::Point2f>& pts1,
-        const std::vector<cv::Point2f>& pts2,
+        const std::vector<cv::Point2f>& resPrevPts,
+        const std::vector<cv::Point2f>& resCurrPts,
         const cv::Mat& K,
         Sophus::SE3d& relative_pose,
         double scale = 1.0

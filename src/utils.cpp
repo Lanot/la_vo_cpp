@@ -106,8 +106,8 @@ void estimateOpticalFlowPyrLKMatchesAndFillResults(
     cv::TermCriteria& termCriteria,
     const Frame::Ptr& prev,
     const Frame::Ptr& curr,
-    std::vector<cv::Point2f>& pts1,
-    std::vector<cv::Point2f>& pts2
+    std::vector<cv::Point2f>& resPrevPts,
+    std::vector<cv::Point2f>& resCurrPts
 )
 {
     std::vector<uchar> status;
@@ -136,30 +136,32 @@ void estimateOpticalFlowPyrLKMatchesAndFillResults(
     {
         if (status[i])
         {
-            pts1.push_back(prev_points2f[i]);
-            pts2.push_back(curr_points2f[i]);
+            resPrevPts.push_back(prev_points2f[i]);
+            resCurrPts.push_back(curr_points2f[i]);
         }
     }
 }
 
 //queryIdx	index in FIRST descriptor set
 //trainIdx	index in SECOND descriptor set
-void filterMatchesAndFillResults(
+void filterSimpleMatchesAndFillResults(
     double max_dist,
     const Frame::Ptr& prev,
     const Frame::Ptr& curr,
-    std::vector<cv::DMatch>& matches,
-    std::vector<cv::Point2f>& pts1,
-    std::vector<cv::Point2f>& pts2
+    const std::vector<cv::DMatch>& simpleMatches,
+    std::vector<cv::DMatch>& resMatches,
+    std::vector<cv::Point2f>& resPrevPts,
+    std::vector<cv::Point2f>& resCurrPts
 )
 {
     //todo: resize: matches.resize(config_.orb_max_sorted_features);
-    for (auto& m : matches)
+    for (auto& m : simpleMatches)
     {
         if (m.distance <= max_dist)
         {
-            pts1.push_back(prev->keypoints[m.queryIdx].pt);
-            pts2.push_back(curr->keypoints[m.trainIdx].pt);
+            resMatches.push_back(m);
+            resPrevPts.push_back(prev->keypoints[m.queryIdx].pt);
+            resCurrPts.push_back(curr->keypoints[m.trainIdx].pt);
         }
     }
 }
@@ -169,8 +171,9 @@ void filterKnnMatchesAndFillResults(
     const Frame::Ptr& prev,
     const Frame::Ptr& curr,
     std::vector<std::vector<cv::DMatch>>& knnMatches,
-    std::vector<cv::Point2f>& pts1,
-    std::vector<cv::Point2f>& pts2
+    std::vector<cv::DMatch>& resMatches,
+    std::vector<cv::Point2f>& resPrevPts,
+    std::vector<cv::Point2f>& resCurrPts
 )
 {
     for (std::vector<cv::DMatch>& m : knnMatches)
@@ -180,8 +183,9 @@ void filterKnnMatchesAndFillResults(
 
         if (m[0].distance < knn_dist_k * m[1].distance) // && (m[0].distance < config_.orb_max_dist))
         {
-            pts1.push_back(prev->keypoints[m[0].queryIdx].pt);
-            pts2.push_back(curr->keypoints[m[0].trainIdx].pt);
+            resMatches.push_back(m[0]);
+            resPrevPts.push_back(prev->keypoints[m[0].queryIdx].pt);
+            resCurrPts.push_back(curr->keypoints[m[0].trainIdx].pt);
         }
     }
 }

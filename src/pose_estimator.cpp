@@ -5,21 +5,21 @@ PoseEstimator::PoseEstimator(const PoseEstimatorConfig& config)
 {}
 
 bool PoseEstimator::estimate(
-    const std::vector<cv::Point2f>& pts1,
-    const std::vector<cv::Point2f>& pts2,
+    const std::vector<cv::Point2f>& resPrevPts,
+    const std::vector<cv::Point2f>& resCurrPts,
     const cv::Mat& K,
     Sophus::SE3d& relative_pose,
     double scale
 )
 {
-    if (pts1.size() < config_.min_pts)
+    if (resPrevPts.size() < config_.min_pts)
         return false;
 
     cv::Mat mask;
 
     cv::Mat E = cv::findEssentialMat(
-        pts1,
-        pts2,
+        resPrevPts,
+        resCurrPts,
         K,
         cv::RANSAC,
         config_.essential_prob,
@@ -34,8 +34,8 @@ bool PoseEstimator::estimate(
     // t: x=right, y=down, z=forward
     int inliers = cv::recoverPose(
         E,
-        pts1,
-        pts2,
+        resPrevPts,
+        resCurrPts,
         K,
         R,
         t,

@@ -15,6 +15,6 @@ struct VisualOdometryResult
 
     std::vector<cv::DMatch> matches;
 
-    std::vector<cv::Point2f> pts1;
-    std::vector<cv::Point2f> pts2;
+    std::vector<cv::Point2f> resPrevPts;
+    std::vector<cv::Point2f> resCurrPts;
 };

@@ -51,14 +51,15 @@ bool FeatureTrackerORB::extract(Frame::Ptr prev, Frame::Ptr curr)
 bool FeatureTrackerORB::match(
     Frame::Ptr prev,
     Frame::Ptr curr,
-    std::vector<cv::Point2f>& pts1,
-    std::vector<cv::Point2f>& pts2
+    std::vector<cv::DMatch>& resMatches,
+    std::vector<cv::Point2f>& resPrevPts,
+    std::vector<cv::Point2f>& resCurrPts
 )
 {
     auto cfm = config_.orb_feature_matcher;
     if (cfm == FeatureMatcher::LKOF)
     {
-        estimateOpticalFlowPyrLKMatchesAndFillResults(*lkofCriteria_, prev, curr, pts1, pts2);
+        estimateOpticalFlowPyrLKMatchesAndFillResults(*lkofCriteria_, prev, curr, resPrevPts, resCurrPts);
     }
     else if (cfm == FeatureMatcher::BF_KNN || cfm == FeatureMatcher::FLANN_KNN)
     {
@@ -73,7 +74,7 @@ bool FeatureTrackerORB::match(
             flannMatcher_->knnMatch(prev->descriptors, curr->descriptors, knnMatches, 2);
         }
 
-        filterKnnMatchesAndFillResults(config_.orb_knn_dist_k, prev, curr, knnMatches, pts1, pts2);
+        filterKnnMatchesAndFillResults(config_.orb_knn_dist_k, prev, curr, knnMatches, resMatches, resPrevPts, resCurrPts);
     }
     else if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::FLANN)
     {
@@ -91,8 +92,8 @@ bool FeatureTrackerORB::match(
         sortMatches(matches);
         matches.resize(config_.orb_max_sorted_simple_features);
 
-        filterMatchesAndFillResults(config_.orb_max_dist_simple, prev, curr, matches, pts1, pts2);
+        filterSimpleMatchesAndFillResults(config_.orb_max_dist_simple, prev, curr, matches, resMatches, resPrevPts, resCurrPts);
     }
 
-    return pts2.size() >= config_.orb_min_valid_features;
+    return resCurrPts.size() >= config_.orb_min_valid_features;
 }

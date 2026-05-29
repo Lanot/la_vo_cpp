@@ -36,8 +36,9 @@ bool FeatureTrackerSuperPoint::extract(Frame::Ptr prev, Frame::Ptr curr)
 bool FeatureTrackerSuperPoint::match(
     Frame::Ptr prev,
     Frame::Ptr curr,
-    std::vector<cv::Point2f>& pts1,
-    std::vector<cv::Point2f>& pts2
+    std::vector<cv::DMatch>& resMatches,
+    std::vector<cv::Point2f>& resPrevPts,
+    std::vector<cv::Point2f>& resCurrPts
 )
 {
     // auto cfm = config_.super_point_feature_matcher;
@@ -54,7 +55,7 @@ bool FeatureTrackerSuperPoint::match(
     //         flannMatcher_->knnMatch(prev->descriptors, curr->descriptors, knnMatches, 2);
     //     }
     //
-    //     filterKnnMatchesAndFillResults(config_.super_point_knn_dist_k, prev, curr, knnMatches, good_matches, pts1, pts2);
+    //     filterKnnMatchesAndFillResults(config_.super_point_knn_dist_k, prev, curr, knnMatches, resMatches, resPrevPts, resCurrPts);
     // }
     // else
     // {
@@ -72,8 +73,8 @@ bool FeatureTrackerSuperPoint::match(
     //     sortMatches(matches);
     //     matches.resize(config_.super_point_max_sorted_simple_features);
     //
-    //     filterMatchesAndFillResults(config_.super_point_max_dist_simple, prev, curr, matches, good_matches, pts1, pts2);
+    //     filterSimpleMatchesAndFillResults(config_.super_point_max_dist_simple, prev, curr, matches, resMatches, resPrevPts, resCurrPts);
     // }
     //
-    // return pts2.size() >= config_.super_point_min_valid_features;
+    // return resCurrPts.size() >= config_.super_point_min_valid_features;
 }
