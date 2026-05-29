@@ -91,12 +91,17 @@ void Config::loadTracking()
     tr["orb_min_valid_features"] >> tracker_.orb_min_valid_features;
     tr["orb_knn_dist_k"] >> tracker_.orb_knn_dist_k;
     tr["orb_max_dist_simple"] >> tracker_.orb_max_dist_simple;
+    tr["orb_lkof_criteria_max_it"] >> tracker_.orb_lkof_criteria_max_it;
+    tr["orb_lkof_criteria_eps"] >> tracker_.orb_lkof_criteria_eps;
+
 
     tr["sift_max_extract_features"] >> tracker_.sift_max_extract_features;
     tr["sift_max_sorted_simple_features"] >> tracker_.sift_max_sorted_simple_features;
     tr["sift_min_valid_features"] >> tracker_.sift_min_valid_features;
     tr["sift_knn_dist_k"] >> tracker_.sift_knn_dist_k;
     tr["sift_max_dist_simple"] >> tracker_.sift_max_dist_simple;
+    tr["sift_lkof_criteria_max_it"] >> tracker_.sift_lkof_criteria_max_it;
+    tr["sift_lkof_criteria_eps"] >> tracker_.sift_lkof_criteria_eps;
 }
 
 // --------------------------------------------------------------------------------------------- //

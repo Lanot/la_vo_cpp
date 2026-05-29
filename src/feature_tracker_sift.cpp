@@ -12,7 +12,15 @@ FeatureTrackerSIFT::FeatureTrackerSIFT(const TrackerConfig& config)
     );
 
     auto cfm = config_.sift_feature_matcher;
-    if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::BF_KNN)
+    if (cfm == FeatureMatcher::LKOF)
+    {
+        lkofCriteria_ = cv::makePtr<cv::TermCriteria>(
+            cv::TermCriteria::COUNT + cv::TermCriteria::EPS,
+            config_.sift_lkof_criteria_max_it,
+            config_.sift_lkof_criteria_eps
+        );
+    }
+    else if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::BF_KNN)
     {
         bfMatcher_ = cv::BFMatcher::create(cv::NORM_L2, false);
     }
@@ -40,9 +48,12 @@ bool FeatureTrackerSIFT::match(
     std::vector<cv::Point2f>& pts2
 )
 {
-    auto cfm = config_.sift_feature_matcher;
-
-    if (cfm == FeatureMatcher::BF_KNN || cfm == FeatureMatcher::FLANN_KNN)
+    auto cfm = config_.orb_feature_matcher;
+    if (cfm == FeatureMatcher::LKOF)
+    {
+        estimateOpticalFlowPyrLKMatchesAndFillResults(*lkofCriteria_, prev, curr, pts1, pts2);
+    }
+    else if (cfm == FeatureMatcher::BF_KNN || cfm == FeatureMatcher::FLANN_KNN)
     {
         std::vector<std::vector<cv::DMatch>> knnMatches;
 

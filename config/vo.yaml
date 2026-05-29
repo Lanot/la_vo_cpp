@@ -22,13 +22,13 @@ estimation:
   essential_threshold: 1.0
 
 tracking:
-  # sift|orb - orb is default | sift + flann_knn is a very good combo, but slow
+  # sift|orb - orb is default | sift + flann_knn, sift + lkof, orb + lkof are a very good combos. sift + flan_knn is a bit slow
   feature_type: orb
 
   # -------------------------------------------------------------- #
   # ORB
   # bf|bf_knn|flann|flann_knn|lkof - bf is default, lkof - LK Optical Flow
-  orb_feature_matcher: bf
+  orb_feature_matcher: lkof
   orb_max_extract_features: 2000
   orb_max_sorted_simple_features: 500
   orb_min_valid_features: 20
@@ -36,6 +36,10 @@ tracking:
   orb_knn_dist_k: 0.50
   # ORB Hamming Distance: 20–40
   orb_max_dist_simple: 20
+  # high precision lkof params: 50, 0.001
+  # Robust lkof params: 20, 0.03
+  orb_lkof_criteria_max_it: 50
+  orb_lkof_criteria_eps: 0.001
 
   # -------------------------------------------------------------- #
   # SIFT
@@ -48,3 +52,7 @@ tracking:
   sift_knn_dist_k: 0.85
   # SIFT L2 Distance: 100–250
   sift_max_dist_simple: 80
+  # high precision lkof params: 50, 0.001
+  # Robust lkof params: 20, 0.03
+  sift_lkof_criteria_max_it: 20
+  sift_lkof_criteria_eps: 0.03

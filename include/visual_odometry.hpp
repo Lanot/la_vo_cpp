@@ -20,7 +20,7 @@ public:
     Sophus::SE3d currentPose() const;
 
 protected:
-    Frame::Ptr prev_frame_ = nullptr;
+    Frame::Ptr prev_frame_;
     Sophus::SE3d global_pose_;
 
     std::shared_ptr<Config> config_;

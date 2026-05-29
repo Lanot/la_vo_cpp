@@ -50,6 +50,8 @@ struct TrackerConfig
     int orb_min_valid_features = 20;
     double orb_knn_dist_k = 0.8;
     double orb_max_dist_simple = 20;
+    int orb_lkof_criteria_max_it = 20;
+    double orb_lkof_criteria_eps = 0.03;
 
     FeatureMatcher sift_feature_matcher = FeatureMatcher::BF;
     int sift_max_extract_features = 1000;
@@ -57,6 +59,8 @@ struct TrackerConfig
     int sift_min_valid_features = 20;
     double sift_knn_dist_k = 0.8;
     double sift_max_dist_simple = 100;
+    int sift_lkof_criteria_max_it = 20;
+    double sift_lkof_criteria_eps = 0.03;
 };
 
 // ------------------------------------------------------------------------------------------------------------------ //

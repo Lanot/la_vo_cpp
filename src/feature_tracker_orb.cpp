@@ -18,10 +18,11 @@ FeatureTrackerORB::FeatureTrackerORB(const TrackerConfig& config)
     auto cfm = config_.orb_feature_matcher;
     if (cfm == FeatureMatcher::LKOF)
     {
-        // Real-time embedded
-        ofCriteria_ = cv::makePtr<cv::TermCriteria>(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 20, 0.03);
-        // High-precision tracking
-        //ofCriteria_ = cv::makePtr<cv::TermCriteria>(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 50, 0.001);
+        lkofCriteria_ = cv::makePtr<cv::TermCriteria>(
+            cv::TermCriteria::COUNT + cv::TermCriteria::EPS,
+            config_.orb_lkof_criteria_max_it,
+            config_.orb_lkof_criteria_eps
+        );
     }
     else if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::BF_KNN)
     {
@@ -57,7 +58,7 @@ bool FeatureTrackerORB::match(
     auto cfm = config_.orb_feature_matcher;
     if (cfm == FeatureMatcher::LKOF)
     {
-        estimateOpticalFlowPyrLKMatchesAndFillResults(*ofCriteria_, prev, curr, pts1, pts2);
+        estimateOpticalFlowPyrLKMatchesAndFillResults(*lkofCriteria_, prev, curr, pts1, pts2);
     }
     else if (cfm == FeatureMatcher::BF_KNN || cfm == FeatureMatcher::FLANN_KNN)
     {
