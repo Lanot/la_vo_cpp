@@ -82,24 +82,48 @@ void Config::loadTracking()
 {
     const cv::FileNode tr = fs_["tracking"];
 
+    tracker_.feature_type = mapFeatureType((std::string)tr["feature_type"]);
+    tracker_.orb_feature_matcher = mapFeatureMatcher(tr["orb_feature_matcher"]);
+    tracker_.sift_feature_matcher = mapFeatureMatcher(tr["sift_feature_matcher"]);
+
     tr["orb_max_extract_features"] >> tracker_.orb_max_extract_features;
-    tr["orb_max_sorted_features"] >> tracker_.orb_max_sorted_features;
+    tr["orb_max_sorted_simple_features"] >> tracker_.orb_max_sorted_simple_features;
     tr["orb_min_valid_features"] >> tracker_.orb_min_valid_features;
-    // tr["orb_max_distance"] >> tracker_.orb_max_distance;
-    tr["orb_knn_distance_k"] >> tracker_.orb_knn_distance_k;
+    tr["orb_knn_dist_k"] >> tracker_.orb_knn_dist_k;
+    tr["orb_max_dist_simple"] >> tracker_.orb_max_dist_simple;
 
     tr["sift_max_extract_features"] >> tracker_.sift_max_extract_features;
-    tr["sift_max_sorted_features"] >> tracker_.sift_max_sorted_features;
+    tr["sift_max_sorted_simple_features"] >> tracker_.sift_max_sorted_simple_features;
     tr["sift_min_valid_features"] >> tracker_.sift_min_valid_features;
-    // tr["sift_max_distance"] >> tracker_.sift_max_distance;
-    tr["sift_knn_distance_k"] >> tracker_.sift_knn_distance_k;
+    tr["sift_knn_dist_k"] >> tracker_.sift_knn_dist_k;
+    tr["sift_max_dist_simple"] >> tracker_.sift_max_dist_simple;
+}
 
-    std::string feature_type = (std::string)tr["feature_type"];
+// --------------------------------------------------------------------------------------------- //
+FeatureType Config::mapFeatureType(const std::string& feature_type)
+{
     if (feature_type == "sift")
     {
-        tracker_.feature_type = FeatureType::SIFT;
-    } else
-    {
-        tracker_.feature_type = FeatureType::ORB;
+        return FeatureType::SIFT;
     }
+
+    return FeatureType::ORB;
+}
+
+FeatureMatcher Config::mapFeatureMatcher(const std::string& feature_matcher)
+{
+    if (feature_matcher == "flann")
+    {
+        return FeatureMatcher::FLANN;
+    }
+    else if (feature_matcher == "flann_knn")
+    {
+        return FeatureMatcher::FLANN_KNN;
+    }
+    else if (feature_matcher == "bf_knn")
+    {
+        return FeatureMatcher::BF_KNN;
+    }
+
+    return FeatureMatcher::BF;
 }

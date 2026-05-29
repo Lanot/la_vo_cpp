@@ -22,7 +22,7 @@ public:
 
 protected:
     TrackerConfig config_;
-
-    cv::Ptr<cv::BFMatcher> matcher_;
     cv::Ptr<cv::SIFT> sift_;
+    cv::Ptr<cv::BFMatcher> bfMatcher_;
+    cv::Ptr<cv::FlannBasedMatcher> flannMatcher_;
 };

@@ -2,6 +2,14 @@
 
 #include <opencv2/opencv.hpp>
 
+enum FeatureMatcher
+{
+    BF,
+    BF_KNN,
+    FLANN,
+    FLANN_KNN,
+};
+
 enum FeatureType
 {
     ORB,
@@ -35,17 +43,20 @@ struct TrackerConfig
 {
     FeatureType feature_type = FeatureType::ORB;
 
-    int orb_max_extract_features = 1000;
-    int orb_max_sorted_features = 100;
-    int orb_min_valid_features = 20;
-    double orb_knn_distance_k = 0.8;
-    // double orb_max_distance = 20;
 
+    FeatureMatcher orb_feature_matcher = FeatureMatcher::BF;
+    int orb_max_extract_features = 1000;
+    int orb_max_sorted_simple_features = 100;
+    int orb_min_valid_features = 20;
+    double orb_knn_dist_k = 0.8;
+    double orb_max_dist_simple = 20;
+
+    FeatureMatcher sift_feature_matcher = FeatureMatcher::BF;
     int sift_max_extract_features = 1000;
-    int sift_max_sorted_features = 100;
+    int sift_max_sorted_simple_features = 100;
     int sift_min_valid_features = 20;
-    double sift_knn_distance_k = 0.8;
-    // double sift_max_distance = 20;
+    double sift_knn_dist_k = 0.8;
+    double sift_max_dist_simple = 100;
 };
 
 
@@ -58,6 +69,9 @@ protected:
     void loadPoseEstimator();
     void loadTracking();
 
+    static FeatureType mapFeatureType(const std::string& feature_type);
+    static FeatureMatcher mapFeatureMatcher(const std::string& feature_matcher);
+
     int precision_ = 4;
 
     cv::FileStorage fs_;
@@ -67,6 +81,7 @@ protected:
 
     TrackerConfig tracker_;
     PoseEstimatorConfig pose_estimator_config_;
+
 
 public:
     Config(const std::string& path);

@@ -22,7 +22,7 @@ public:
 
 protected:
     TrackerConfig config_;
-
-    cv::Ptr<cv::BFMatcher> matcher_;
     cv::Ptr<cv::ORB> orb_;
+    cv::Ptr<cv::BFMatcher> bfMatcher_;
+    cv::Ptr<cv::FlannBasedMatcher> flannMatcher_;
 };

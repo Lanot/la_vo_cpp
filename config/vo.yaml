@@ -22,17 +22,29 @@ estimation:
   essential_threshold: 1.0
 
 tracking:
+  # sift|orb - orb is default
   feature_type: sift
 
+  # -------------------------------------------------------------- #
   # ORB
-  # orb_max_distance:   20 # ORB Hamming Distance: 20–40
-  orb_knn_distance_k: 0.5 # Smaller ratio = stricter ambiguity check
+  # bf|bf_knn|flann|flann_knn - bf is default
+  orb_feature_matcher: bf
   orb_max_extract_features: 2000
-  #orb_max_sorted_features:  100
-  orb_min_valid_features:   20
+  orb_max_sorted_simple_features: 500
+  orb_min_valid_features: 20
+  # Smaller ratio = stricter ambiguity check
+  orb_knn_dist_k: 0.50
+  # ORB Hamming Distance: 20–40
+  orb_max_dist_simple: 20
 
-  # sift_max_distance: 100  # SIFT L2 Distance: 100–250
-  sift_knn_distance_k: 0.85 # Smaller ratio = stricter ambiguity check
+  # -------------------------------------------------------------- #
+  # SIFT
+  # bf|bf_knn|flann|flann_knn - bf is default
+  sift_feature_matcher: flann_knn
   sift_max_extract_features: 2000
-  #sift_max_sorted_features: 100
+  sift_max_sorted_simple_features: 500
   sift_min_valid_features: 20
+  # Smaller ratio = stricter ambiguity check
+  sift_knn_dist_k: 0.85
+  # SIFT L2 Distance: 100–250
+  sift_max_dist_simple: 100

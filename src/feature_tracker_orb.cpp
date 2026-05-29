@@ -4,28 +4,38 @@ FeatureTrackerORB::FeatureTrackerORB(const TrackerConfig& config)
     : config_(config)
 {
     orb_ = cv::ORB::create(
-        config_.orb_max_extract_features,          // nfeatures
-        1.2f,          // scaleFactor
-        8,             // nlevels
-        31,            // edgeThreshold
-        0,             // firstLevel
-        2,             // WTA_K
+        config_.orb_max_extract_features, // nfeatures
+        1.2f, // scaleFactor
+        8, // nlevels
+        31, // edgeThreshold
+        0, // firstLevel
+        2, // WTA_K
         cv::ORB::HARRIS_SCORE,
-        31,            // patchSize
-        20             // fastThreshold
+        31, // patchSize
+        20 // fastThreshold
     );
 
-    matcher_ = cv::BFMatcher::create(cv::NORM_HAMMING, false);
+    auto cfm = config_.orb_feature_matcher;
+    if (cfm == FeatureMatcher::BF || cfm == FeatureMatcher::BF_KNN)
+    {
+        bfMatcher_ = cv::BFMatcher::create(cv::NORM_HAMMING, false);
+    }
+    else
+    {
+        // ORB requires LSH index: ORB + FLANN-LSH, ORB Descriptor is CV_8U
+         flannMatcher_ = cv::makePtr<cv::FlannBasedMatcher>(
+            cv::makePtr<cv::flann::LshIndexParams>(
+                12, // table_number
+                20, // key_size
+                2   // multi_probe_level
+            )
+         );
+    }
 }
 
 bool FeatureTrackerORB::extract(Frame::Ptr frame)
 {
-    orb_->detectAndCompute(
-        frame->image,
-        cv::noArray(),
-        frame->keypoints,
-        frame->descriptors
-    );
+    orb_->detectAndCompute(frame->image, cv::noArray(), frame->keypoints, frame->descriptors);
 
     return !frame->keypoints.empty();
 }
@@ -35,26 +45,42 @@ bool FeatureTrackerORB::match(
     Frame::Ptr curr,
     std::vector<cv::DMatch>& good_matches,
     std::vector<cv::Point2f>& pts1,
-    std::vector<cv::Point2f>& pts2)
+    std::vector<cv::Point2f>& pts2
+)
 {
-    std::vector<std::vector<cv::DMatch>> matches2d;
-
-    matcher_->knnMatch(prev->descriptors, curr->descriptors, matches2d, 2);
-
-    for (std::vector<cv::DMatch>& m : matches2d)
+    auto cfm = config_.orb_feature_matcher;
+    if (cfm == FeatureMatcher::BF_KNN || cfm == FeatureMatcher::FLANN_KNN)
     {
-        if (m[0].distance < config_.orb_knn_distance_k * m[1].distance) // && (m[0].distance < config_.orb_max_distance))
+        std::vector<std::vector<cv::DMatch>> knnMatches;
+
+        if (cfm == FeatureMatcher::BF_KNN)
         {
-            good_matches.push_back(m[0]);
-
-            pts1.push_back(
-                prev->keypoints[m[0].queryIdx].pt
-            );
-
-            pts2.push_back(
-                curr->keypoints[m[0].trainIdx].pt
-            );
+            bfMatcher_->knnMatch(prev->descriptors, curr->descriptors, knnMatches, 2);
         }
+        else
+        {
+            flannMatcher_->knnMatch(prev->descriptors, curr->descriptors, knnMatches, 2);
+        }
+
+        filterKnnMatchesAndFillResults(config_.orb_knn_dist_k, prev, curr, knnMatches, good_matches, pts1, pts2);
+    }
+    else
+    {
+        std::vector<cv::DMatch> matches;
+
+        if (cfm == FeatureMatcher::BF)
+        {
+            bfMatcher_->match(prev->descriptors, curr->descriptors, matches);
+        }
+        else
+        {
+            flannMatcher_->match(prev->descriptors, curr->descriptors, matches);
+        }
+
+        sortMatches(matches);
+        matches.resize(config_.orb_max_sorted_simple_features);
+
+        filterMatchesAndFillResults(config_.orb_max_dist_simple, prev, curr, matches, good_matches, pts1, pts2);
     }
 
     return good_matches.size() >= config_.orb_min_valid_features;

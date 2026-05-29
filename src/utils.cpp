@@ -90,7 +90,7 @@ Sophus::SE3d kittiLinePoseToSophusPose(std::string line)
     return Sophus::SE3d(R, t);
 }
 
-void sort1DMatches(std::vector<cv::DMatch>& matches)
+void sortMatches(std::vector<cv::DMatch>& matches)
 {
     std::sort(
         matches.begin(),
@@ -100,4 +100,50 @@ void sort1DMatches(std::vector<cv::DMatch>& matches)
             return a.distance < b.distance;
         }
     );
+}
+
+void filterMatchesAndFillResults(
+    double max_dist,
+    const Frame::Ptr& prev,
+    const Frame::Ptr& curr,
+    std::vector<cv::DMatch>& matches,
+    std::vector<cv::DMatch>& good_matches,
+    std::vector<cv::Point2f>& pts1,
+    std::vector<cv::Point2f>& pts2
+)
+{
+    //todo: resize: matches.resize(config_.orb_max_sorted_features);
+    for (auto& m : matches)
+    {
+        if (m.distance <= max_dist)
+        {
+            good_matches.push_back(m);
+            pts1.push_back(prev->keypoints[m.queryIdx].pt);
+            pts2.push_back(curr->keypoints[m.trainIdx].pt);
+        }
+    }
+}
+
+void filterKnnMatchesAndFillResults(
+    double knn_dist_k,
+    const Frame::Ptr& prev,
+    const Frame::Ptr& curr,
+    std::vector<std::vector<cv::DMatch>>& knnMatches,
+    std::vector<cv::DMatch>& good_matches,
+    std::vector<cv::Point2f>& pts1,
+    std::vector<cv::Point2f>& pts2
+)
+{
+    for (std::vector<cv::DMatch>& m : knnMatches)
+    {
+        if (m.size() < 2)
+            continue;
+
+        if (m[0].distance < knn_dist_k * m[1].distance) // && (m[0].distance < config_.orb_max_dist))
+        {
+            good_matches.push_back(m[0]);
+            pts1.push_back(prev->keypoints[m[0].queryIdx].pt);
+            pts2.push_back(curr->keypoints[m[0].trainIdx].pt);
+        }
+    }
 }
