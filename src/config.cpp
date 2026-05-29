@@ -106,6 +106,10 @@ FeatureType Config::mapFeatureType(const std::string& feature_type)
     {
         return FeatureType::SIFT;
     }
+    else if (feature_type == "super_point")
+    {
+        return FeatureType::SUPER_POINT;
+    }
 
     return FeatureType::ORB;
 }

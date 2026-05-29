@@ -22,6 +22,7 @@ add_executable(la_mono_vo
         src/config.cpp
         src/feature_tracker_orb.cpp
         src/feature_tracker_sift.cpp
+        src/feature_tracker_super_point.cpp
         src/feature_tracker_factory.cpp
         src/pose_estimator.cpp
         src/visual_odometry.cpp

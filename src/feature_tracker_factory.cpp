@@ -6,8 +6,10 @@ std::unique_ptr<IFeatureTracker> FeatureTrackerFactory::create(const TrackerConf
    {
       return std::make_unique<FeatureTrackerSIFT>(config);
    }
-   else
+   else if (config.feature_type == FeatureType::SUPER_POINT)
    {
-      return std::make_unique<FeatureTrackerORB>(config);
+      return std::make_unique<FeatureTrackerSuperPoint>(config);
    }
+
+   return std::make_unique<FeatureTrackerORB>(config);
 }

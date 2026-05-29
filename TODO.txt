@@ -3,12 +3,9 @@ LIST of TODO:
 1. Implement Minimal VO with static settings -> Done
 2. Parametrize Settings via config/params.yaml -> Done
 
-3. Add many feature types and matching methods
+3. Add several feature types and matching methods:
 ORB -> done
 SIFT -> done
-SURF -> Pending
-BRISK -> Pending
-...
 SuperPoint + LightGlue or SuperGlue-> Pending
 
 4. Add Triangulation-> Pending

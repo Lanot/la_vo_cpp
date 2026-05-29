@@ -14,7 +14,7 @@ enum FeatureType
 {
     ORB,
     SIFT,
-    //SUPER_POINT
+    SUPER_POINT
 };
 
 struct CameraConfig
@@ -43,7 +43,6 @@ struct TrackerConfig
 {
     FeatureType feature_type = FeatureType::ORB;
 
-
     FeatureMatcher orb_feature_matcher = FeatureMatcher::BF;
     int orb_max_extract_features = 1000;
     int orb_max_sorted_simple_features = 100;
@@ -58,7 +57,6 @@ struct TrackerConfig
     double sift_knn_dist_k = 0.8;
     double sift_max_dist_simple = 100;
 };
-
 
 // ------------------------------------------------------------------------------------------------------------------ //
 class Config
