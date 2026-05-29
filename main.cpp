@@ -18,9 +18,6 @@ int main(int argc, char** argv)
     std::shared_ptr<VisualizerOpenCv> vo_visualizer = std::make_shared<VisualizerOpenCv>();
     std::shared_ptr<VisualizerOpenCv> gt_visualizer = std::make_shared<VisualizerOpenCv>();
 
-    vo_visualizer->setPoseColor(cv::Scalar(255, 0, 0));
-    gt_visualizer->setPoseColor(cv::Scalar(0, 0, 255));
-
     cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
 
     auto config = std::make_shared<Config>(argv[1]);
@@ -84,14 +81,11 @@ int main(int argc, char** argv)
             std::cout << "Pose estimation succeeded: #" << i << std::endl;
 
             // Draw VO Estimation Pose and Matches
-            vo_visualizer->drawPose(res.curr_frame->pose);
             vo_visualizer->drawMatches(res.prev_frame, res.curr_frame, res.matches);
+            vo_visualizer->drawPose(res.curr_frame->pose, curr_gt_pose);
 
             Eigen::Vector3d vo_t = res.curr_frame->pose.translation();
             std::cout << "VO POSE: X: " << vo_t.x() << "  Y: " << vo_t.z() << std::endl;
-
-            // Draw Kitti Ground Truth Pose
-            gt_visualizer->drawPose(curr_gt_pose);
 
             Eigen::Vector3d gt_t = curr_gt_pose.translation();
             std::cout << "GT POSE: X: " << gt_t.x() << "  Y: " << gt_t.z() << std::endl;

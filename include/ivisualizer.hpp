@@ -14,6 +14,7 @@ public:
     ) = 0;
 
     virtual void drawPose(
-        const Sophus::SE3d& pose
+        const Sophus::SE3d& pose,
+        const Sophus::SE3d& gt_pose
     ) = 0;
 };

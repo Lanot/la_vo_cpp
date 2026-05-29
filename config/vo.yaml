@@ -28,7 +28,7 @@ tracking:
   # -------------------------------------------------------------- #
   # ORB
   # bf|bf_knn|flann|flann_knn - bf is default
-  orb_feature_matcher: bf
+  orb_feature_matcher: flann_knn
   orb_max_extract_features: 2000
   orb_max_sorted_simple_features: 500
   orb_min_valid_features: 20
