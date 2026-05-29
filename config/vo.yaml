@@ -22,7 +22,7 @@ estimation:
   essential_threshold: 1.0
 
 tracking:
-  # sift|orb - orb is default
+  # sift|orb - orb is default | sift + flann_knn is a very good combo, but slow
   feature_type: sift
 
   # -------------------------------------------------------------- #
