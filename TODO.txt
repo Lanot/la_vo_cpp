@@ -2,18 +2,18 @@ LIST of TODO:
 
 1. Implement Minimal VO with static settings -> Done
 2. Parametrize Settings via config/params.yaml -> Done
+3. Add Optical Flow matching method-> Done
 
-3. Add several feature types and matching methods:
+4. Add several feature types and matching methods:
 ORB -> done
 SIFT -> done
 SuperPoint + LightGlue or SuperGlue-> Pending
 
-4. Add Triangulation-> Pending
-5. Add Optical Flow - optional-> Pending
-6. Add Stereo, RGB-D, Multi Mono inputs -> Pending
-7. Add Local Map, Loop Closure-> Pending
-8. Add Bundle Adjustment-> Pending
-9. Add IMU integration or EKF integration for IMU Fusion-> Pending
+5. Add IMU integration or EKF integration for IMU Fusion-> Pending
+6. Add Triangulation-> Pending
+7. Add Stereo, RGB-D, Multi Mono inputs -> Pending
+8. Add Local Map, Loop Closure-> Pending
+9. Add Bundle Adjustment-> Pending
 10. Add Local Map, Loop Closure-> Pending
 
 11. Convert into ROS2 package -> Pending
